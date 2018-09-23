@@ -18,7 +18,12 @@ namespace classification_lab1
             InitializeComponent();
         }
 
-        private void btnCreate_Click(object sender, EventArgs e)
+        private void SpectrForm_Load(object sender, EventArgs e)
+        {
+            numericUpDownNumber.Value = 15;
+        }
+
+        private void numericUpDownNumber_ValueChanged(object sender, EventArgs e)
         {
             int number = Convert.ToInt32(numericUpDownNumber.Value);
             DataTable dt = new DataTable();
@@ -60,7 +65,7 @@ namespace classification_lab1
                 dataGridViewSpectrumOfBonds[1, 2].Value = "0";
             }
 
-            dataGridViewMatrixOfDistances.Height = 
+            dataGridViewMatrixOfDistances.Height =
                 dataGridViewMatrixOfDistances.Width =
                 dataGridViewSpectrumOfBonds.Width = (number + 1) * 30 + 3;
             dataGridViewSpectrumOfBonds.Height = 3 * 30 - 21;
@@ -69,7 +74,7 @@ namespace classification_lab1
             dataGridViewSpectrumOfBonds.Rows[0].DefaultCellStyle.BackColor =
                 dataGridViewSpectrumOfBonds.Columns[0].DefaultCellStyle.BackColor =
                 dataGridViewMatrixOfDistances.Rows[0].DefaultCellStyle.BackColor =
-                dataGridViewMatrixOfDistances.Columns[0].DefaultCellStyle.BackColor = Color.Beige;
+                dataGridViewMatrixOfDistances.Columns[0].DefaultCellStyle.BackColor = Color.LightGray;
         }
 
         private void btnDrawGraph_Click(object sender, EventArgs e)
@@ -128,13 +133,6 @@ namespace classification_lab1
                 {1.2,1.4,1.5,1.5,1.6,1.9,1.9,1.7,1.6,2,4.5,4.5,10,10,0 }
             };
 
-            double[,] testSpectre = new double[,]
-            {
-                {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14},
-                {1,3,2,5,6,11,12,13,14,15,7,8,10,4,9},
-                {0,7,6,5.2,5.1,2.3,2.8,3.6,3.4,4.1,2,2.4,2.9,2.9,3.2}
-            };
-
             for (int i = 0; i < numericUpDownNumber.Value; i++)
             {
                 for (int j = 0; j < numericUpDownNumber.Value; j++)
@@ -142,12 +140,6 @@ namespace classification_lab1
                     dataGridViewMatrixOfDistances[i + 1, j + 1].Value = testMatrix[j, i];
                 }
             }
-
-            //for (int i = 0; i < numericUpDownNumber.Value; i++)
-            //{
-            //    dataGridViewSpectrumOfBonds[i + 1, 1].Value = testSpectre[1, i];
-            //    dataGridViewSpectrumOfBonds[i + 1, 2].Value = testSpectre[2, i];
-            //}
         }
 
         private double DistancePower(List<int> blockB, int x)
@@ -166,13 +158,13 @@ namespace classification_lab1
             blockB.Add(1);
             var xNext = new { index = 1, distance = 0.0 };
 
-            while (blockB.Count < 15)
+            while (blockB.Count < numericUpDownNumber.Value)
             {
                 for (int x = 1; x <= numericUpDownNumber.Value; x++)
                 {
                     if (!blockB.Contains(x))
                     {
-                        double xDistance = Math.Round(DistancePower(blockB, x), 1);
+                        double xDistance = Math.Round(DistancePower(blockB, x), 2);
                         if (xDistance > xNext.distance)
                         {
                             xNext = new { index = x, distance = xDistance };

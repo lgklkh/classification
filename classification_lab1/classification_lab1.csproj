@@ -86,8 +86,14 @@
     <Compile Include="SpectrForm.Designer.cs">
       <DependentUpon>SpectrForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="KrabForm.resx">
+      <DependentUpon>KrabForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="mainForm.resx">
       <DependentUpon>mainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PrimaForm.resx">
+      <DependentUpon>PrimaForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -29,10 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.numericUpDownNumber = new System.Windows.Forms.NumericUpDown();
-            this.btnCreate = new System.Windows.Forms.Button();
             this.dataGridViewMatrixOfDistances = new System.Windows.Forms.DataGridView();
             this.dataGridViewSpectrumOfBonds = new System.Windows.Forms.DataGridView();
             this.btnDrawGraph = new System.Windows.Forms.Button();
@@ -61,20 +60,11 @@
             this.numericUpDownNumber.Size = new System.Drawing.Size(34, 20);
             this.numericUpDownNumber.TabIndex = 1;
             this.numericUpDownNumber.Value = new decimal(new int[] {
-            15,
+            2,
             0,
             0,
             0});
-            // 
-            // btnCreate
-            // 
-            this.btnCreate.Location = new System.Drawing.Point(52, 9);
-            this.btnCreate.Name = "btnCreate";
-            this.btnCreate.Size = new System.Drawing.Size(75, 23);
-            this.btnCreate.TabIndex = 2;
-            this.btnCreate.Text = "Створити";
-            this.btnCreate.UseVisualStyleBackColor = true;
-            this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
+            this.numericUpDownNumber.ValueChanged += new System.EventHandler(this.numericUpDownNumber_ValueChanged);
             // 
             // dataGridViewMatrixOfDistances
             // 
@@ -90,8 +80,8 @@
             this.dataGridViewMatrixOfDistances.RowHeadersVisible = false;
             this.dataGridViewMatrixOfDistances.RowHeadersWidth = 40;
             this.dataGridViewMatrixOfDistances.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGridViewMatrixOfDistances.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dataGridViewMatrixOfDistances.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewMatrixOfDistances.RowTemplate.Height = 20;
             this.dataGridViewMatrixOfDistances.Size = new System.Drawing.Size(30, 30);
             this.dataGridViewMatrixOfDistances.TabIndex = 3;
@@ -108,8 +98,8 @@
             this.dataGridViewSpectrumOfBonds.Location = new System.Drawing.Point(12, 90);
             this.dataGridViewSpectrumOfBonds.Name = "dataGridViewSpectrumOfBonds";
             this.dataGridViewSpectrumOfBonds.RowHeadersVisible = false;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGridViewSpectrumOfBonds.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dataGridViewSpectrumOfBonds.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewSpectrumOfBonds.Size = new System.Drawing.Size(30, 30);
             this.dataGridViewSpectrumOfBonds.TabIndex = 4;
             // 
@@ -169,7 +159,6 @@
             this.Controls.Add(this.btnDrawGraph);
             this.Controls.Add(this.dataGridViewSpectrumOfBonds);
             this.Controls.Add(this.dataGridViewMatrixOfDistances);
-            this.Controls.Add(this.btnCreate);
             this.Controls.Add(this.numericUpDownNumber);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1100, 680);
@@ -177,6 +166,7 @@
             this.MinimumSize = new System.Drawing.Size(1100, 680);
             this.Name = "SpectrForm";
             this.Text = "SpectrForm";
+            this.Load += new System.EventHandler(this.SpectrForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMatrixOfDistances)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSpectrumOfBonds)).EndInit();
@@ -186,7 +176,6 @@
 
         #endregion
         private System.Windows.Forms.NumericUpDown numericUpDownNumber;
-        private System.Windows.Forms.Button btnCreate;
         private System.Windows.Forms.DataGridView dataGridViewMatrixOfDistances;
         private System.Windows.Forms.DataGridView dataGridViewSpectrumOfBonds;
         private System.Windows.Forms.Button btnDrawGraph;
