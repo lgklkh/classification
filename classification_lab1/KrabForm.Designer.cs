@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnToDo = new System.Windows.Forms.Button();
             this.btnTest = new System.Windows.Forms.Button();
             this.dataGridViewBHRbuffer = new System.Windows.Forms.DataGridView();
@@ -75,8 +75,8 @@
             this.dataGridViewBHRbuffer.Location = new System.Drawing.Point(11, 93);
             this.dataGridViewBHRbuffer.Name = "dataGridViewBHRbuffer";
             this.dataGridViewBHRbuffer.RowHeadersVisible = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGridViewBHRbuffer.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dataGridViewBHRbuffer.RowsDefaultCellStyle = dataGridViewCellStyle7;
             this.dataGridViewBHRbuffer.Size = new System.Drawing.Size(30, 30);
             this.dataGridViewBHRbuffer.TabIndex = 18;
             // 
@@ -94,8 +94,8 @@
             this.dataGridViewMatrixOfDistances.RowHeadersVisible = false;
             this.dataGridViewMatrixOfDistances.RowHeadersWidth = 40;
             this.dataGridViewMatrixOfDistances.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGridViewMatrixOfDistances.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dataGridViewMatrixOfDistances.RowsDefaultCellStyle = dataGridViewCellStyle8;
             this.dataGridViewMatrixOfDistances.RowTemplate.Height = 20;
             this.dataGridViewMatrixOfDistances.Size = new System.Drawing.Size(30, 30);
             this.dataGridViewMatrixOfDistances.TabIndex = 17;
@@ -135,8 +135,8 @@
             this.dataGridViewResult.Location = new System.Drawing.Point(74, 57);
             this.dataGridViewResult.Name = "dataGridViewResult";
             this.dataGridViewResult.RowHeadersVisible = false;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGridViewResult.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dataGridViewResult.RowsDefaultCellStyle = dataGridViewCellStyle9;
             this.dataGridViewResult.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewResult.Size = new System.Drawing.Size(30, 30);
             this.dataGridViewResult.TabIndex = 21;

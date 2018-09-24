@@ -79,38 +79,35 @@ namespace classification_lab1
 
         private void btnDrawGraph_Click(object sender, EventArgs e)
         {
-            // Получим панель для рисования
-            GraphPane pane = zedGraph.GraphPane;
+            Graphics gpanel = Graphics.FromHwnd(panelGraph.Handle);
+            gpanel.Clear(SystemColors.Control);
+            var startSys = new { x = panelGraph.Width / 12, y = panelGraph.Height / 12 };
 
-            // Очистим список кривых на тот случай, если до этого сигналы уже были нарисованы
-            pane.CurveList.Clear();
+            // draw coordinate grid
+            gpanel.DrawLine(new Pen(Color.Black, 3), startSys.x, startSys.y,
+                startSys.x, 11 * startSys.y);
+            gpanel.DrawLine(new Pen(Color.Black, 3), startSys.x, 11 * startSys.y,
+                11 * startSys.x, 11 * startSys.y);
 
-            // Создадим список точек
-            PointPairList list = new PointPairList();
+            // draw graph
+            int num = Convert.ToInt32(numericUpDownNumber.Value);
+            List<double> blockC = new List<double>();
+            for(int i = 1; i <= num; i++)            
+                blockC.Add(Convert.ToDouble(dataGridViewSpectrumOfBonds[i, 2].Value));
 
-
-            // Заполняем список точек
-            for (int i = 1; i <= numericUpDownNumber.Value; i++)
+            List<PointF> points = new List<PointF>();
+            for (int i = 1; i <= num; i++)
             {
-                // добавим в список точку
-                list.Add(Convert.ToDouble(dataGridViewSpectrumOfBonds[i, 0].Value), Convert.ToDouble(dataGridViewSpectrumOfBonds[i, 2].Value));
+                int x = Convert.ToInt32(dataGridViewSpectrumOfBonds[i, 0].Value);
+                double y = Convert.ToDouble(dataGridViewSpectrumOfBonds[i, 2].Value);
+                PointF dot = new PointF(startSys.x - 6 + x * (10 * startSys.x / num),
+                    Convert.ToSingle(11 * startSys.y - 6 - y * (10 * startSys.x / blockC.Max())));
+                points.Add(new PointF(dot.X + 6, dot.Y + 6));
+                gpanel.FillEllipse(Brushes.Blue, dot.X, dot.Y, 12, 12);
+                gpanel.DrawString(dataGridViewSpectrumOfBonds[i, 1].Value.ToString(), new Font("Arial", 14),
+                    new SolidBrush(Color.Black), dot.X, dot.Y + 20);
             }
-
-            
-
-            // Создадим кривую с названием "Sinc", 
-            // которая будет рисоваться голубым цветом (Color.Blue),
-            // Опорные точки выделяться не будут (SymbolType.None)
-            LineItem myCurve = pane.AddCurve("Sinc", list, Color.Blue, SymbolType.None);
-
-
-            // Вызываем метод AxisChange (), чтобы обновить данные об осях. 
-            // В противном случае на рисунке будет показана только часть графика, 
-            // которая умещается в интервалы по осям, установленные по умолчанию
-            zedGraph.AxisChange();
-
-            // Обновляем график
-            zedGraph.Invalidate();
+            gpanel.DrawLines(new Pen(Color.Blue, 2), points.ToArray());
         }
 
         private void btnTest_Click(object sender, EventArgs e)
@@ -175,6 +172,14 @@ namespace classification_lab1
                 dataGridViewSpectrumOfBonds[blockB.Count, 1].Value = xNext.index;
                 dataGridViewSpectrumOfBonds[blockB.Count, 2].Value = xNext.distance;
                 xNext = new { index = 0, distance = 0.0 };
+
+                if(blockB.Count > 2 && Convert.ToDouble(dataGridViewSpectrumOfBonds[blockB.Count - 2, 2].Value) >
+                    Convert.ToDouble(dataGridViewSpectrumOfBonds[blockB.Count - 1, 2].Value) &&
+                    Convert.ToDouble(dataGridViewSpectrumOfBonds[blockB.Count - 1, 2].Value) < 
+                    Convert.ToDouble(dataGridViewSpectrumOfBonds[blockB.Count, 2].Value))
+                {
+                    dataGridViewSpectrumOfBonds.Columns[blockB.Count - 1].DefaultCellStyle.BackColor = Color.Pink;
+                }
             }   
         }
     }

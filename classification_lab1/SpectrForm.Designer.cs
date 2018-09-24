@@ -28,16 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.numericUpDownNumber = new System.Windows.Forms.NumericUpDown();
             this.dataGridViewMatrixOfDistances = new System.Windows.Forms.DataGridView();
             this.dataGridViewSpectrumOfBonds = new System.Windows.Forms.DataGridView();
             this.btnDrawGraph = new System.Windows.Forms.Button();
-            this.zedGraph = new ZedGraph.ZedGraphControl();
             this.btnTest = new System.Windows.Forms.Button();
             this.btnToDo = new System.Windows.Forms.Button();
+            this.panelGraph = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMatrixOfDistances)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSpectrumOfBonds)).BeginInit();
@@ -80,8 +79,8 @@
             this.dataGridViewMatrixOfDistances.RowHeadersVisible = false;
             this.dataGridViewMatrixOfDistances.RowHeadersWidth = 40;
             this.dataGridViewMatrixOfDistances.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGridViewMatrixOfDistances.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dataGridViewMatrixOfDistances.RowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewMatrixOfDistances.RowTemplate.Height = 20;
             this.dataGridViewMatrixOfDistances.Size = new System.Drawing.Size(30, 30);
             this.dataGridViewMatrixOfDistances.TabIndex = 3;
@@ -98,8 +97,8 @@
             this.dataGridViewSpectrumOfBonds.Location = new System.Drawing.Point(12, 90);
             this.dataGridViewSpectrumOfBonds.Name = "dataGridViewSpectrumOfBonds";
             this.dataGridViewSpectrumOfBonds.RowHeadersVisible = false;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGridViewSpectrumOfBonds.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dataGridViewSpectrumOfBonds.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewSpectrumOfBonds.Size = new System.Drawing.Size(30, 30);
             this.dataGridViewSpectrumOfBonds.TabIndex = 4;
             // 
@@ -112,21 +111,6 @@
             this.btnDrawGraph.Text = "Графік";
             this.btnDrawGraph.UseVisualStyleBackColor = true;
             this.btnDrawGraph.Click += new System.EventHandler(this.btnDrawGraph_Click);
-            // 
-            // zedGraph
-            // 
-            this.zedGraph.Location = new System.Drawing.Point(556, 159);
-            this.zedGraph.Name = "zedGraph";
-            this.zedGraph.ScrollGrace = 0D;
-            this.zedGraph.ScrollMaxX = 0D;
-            this.zedGraph.ScrollMaxY = 0D;
-            this.zedGraph.ScrollMaxY2 = 0D;
-            this.zedGraph.ScrollMinX = 0D;
-            this.zedGraph.ScrollMinY = 0D;
-            this.zedGraph.ScrollMinY2 = 0D;
-            this.zedGraph.Size = new System.Drawing.Size(500, 300);
-            this.zedGraph.TabIndex = 7;
-            this.zedGraph.UseExtendedPrintDialog = true;
             // 
             // btnTest
             // 
@@ -148,14 +132,21 @@
             this.btnToDo.UseVisualStyleBackColor = true;
             this.btnToDo.Click += new System.EventHandler(this.btnToDo_Click);
             // 
+            // panelGraph
+            // 
+            this.panelGraph.Location = new System.Drawing.Point(610, 90);
+            this.panelGraph.Name = "panelGraph";
+            this.panelGraph.Size = new System.Drawing.Size(450, 450);
+            this.panelGraph.TabIndex = 32;
+            // 
             // SpectrForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1084, 641);
+            this.Controls.Add(this.panelGraph);
             this.Controls.Add(this.btnToDo);
             this.Controls.Add(this.btnTest);
-            this.Controls.Add(this.zedGraph);
             this.Controls.Add(this.btnDrawGraph);
             this.Controls.Add(this.dataGridViewSpectrumOfBonds);
             this.Controls.Add(this.dataGridViewMatrixOfDistances);
@@ -179,8 +170,8 @@
         private System.Windows.Forms.DataGridView dataGridViewMatrixOfDistances;
         private System.Windows.Forms.DataGridView dataGridViewSpectrumOfBonds;
         private System.Windows.Forms.Button btnDrawGraph;
-        private ZedGraph.ZedGraphControl zedGraph;
         private System.Windows.Forms.Button btnTest;
         private System.Windows.Forms.Button btnToDo;
+        private System.Windows.Forms.Panel panelGraph;
     }
 }

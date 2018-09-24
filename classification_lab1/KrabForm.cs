@@ -209,7 +209,7 @@ namespace classification_lab1
             {
                 int firstIndex = bufferSet.ElementAt(i - 1), lastIndex = bufferSet.ElementAt(i);
                 var subSet = bufferR.GetRange(firstIndex + 1, lastIndex - firstIndex - 1);
-                setSum += subSet.Average();
+                setSum += (subSet.Count > 0) ? subSet.Average() : bufferR.Last();
             }
             return setSum / (bufferSet.Count - 1);
         }
@@ -292,12 +292,21 @@ namespace classification_lab1
                 dataGridViewResult[j, 6].Value = Math.Round(l, 3);
 
 
-                if(j > 1)
+                if (j > 1)
+                {
                     if (l < Convert.ToDouble(dataGridViewResult[j - 1, 6].Value))
+                    {
+                        bufferGap.RemoveAt(bufferGap.Count - 1);
                         break;
-                this.Text = L(R(bufferR, bufferGap), H(bufferR, bufferGap), D(bufferR, bufferGap), G(bufferR, bufferGap)).ToString();
+                    }
+                }
+
             }
 
+            foreach(var item in bufferGap)
+            {
+                dataGridViewBHRbuffer.Columns[item + 2].DefaultCellStyle.BackColor = Color.Pink;
+            }
 
         }
     }

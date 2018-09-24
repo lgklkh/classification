@@ -86,6 +86,12 @@
     <Compile Include="SpectrForm.Designer.cs">
       <DependentUpon>SpectrForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Forel2Form.resx">
+      <DependentUpon>Forel2Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ForelForm.resx">
+      <DependentUpon>ForelForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="KrabForm.resx">
       <DependentUpon>KrabForm.cs</DependentUpon>
     </EmbeddedResource>
