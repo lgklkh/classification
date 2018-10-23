@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,9 @@ namespace classification_lab1
 {
     public partial class PrimaForm : Form
     {
+        double[,] testDataset;
+        double[,] testMatrix;
+
         public PrimaForm()
         {
             InitializeComponent();
@@ -57,31 +61,60 @@ namespace classification_lab1
                 dataGridViewBHRbuffer[i, 0].Value = i;
                 dataGridViewMatrixOfDistances.Columns[i].Width =
                     dataGridViewMatrixOfDistances.Rows[i].Height =
-                    dataGridViewBHRbuffer.Columns[i].Width = 25;
+                    dataGridViewBHRbuffer.Columns[i].Width = 30;
                 dataGridViewBHRbuffer[0, 0].Value = "i";
                 dataGridViewBHRbuffer[0, 1].Value = "B(i)";
                 dataGridViewBHRbuffer[0, 2].Value = "H(i)";
                 dataGridViewBHRbuffer[0, 3].Value = "R(i)";
-                dataGridViewBHRbuffer[1, 1].Value = "1";
-                dataGridViewBHRbuffer[1, 2].Value = "1";
+                dataGridViewBHRbuffer[1, 1].Value = number;
+                dataGridViewBHRbuffer[1, 2].Value = number;
                 dataGridViewBHRbuffer[1, 3].Value = "0";
             }
 
-            dataGridViewMatrixOfDistances.Height =
-                dataGridViewMatrixOfDistances.Width =
-                dataGridViewBHRbuffer.Width = (number + 1) * 25 + 3;
-            dataGridViewBHRbuffer.Height = 4 * 25 - 8;
-            dataGridViewBHRbuffer.Location =
-                new Point(dataGridViewMatrixOfDistances.Location.X, dataGridViewMatrixOfDistances.Location.Y + dataGridViewMatrixOfDistances.Height + 30);
             dataGridViewBHRbuffer.Rows[0].DefaultCellStyle.BackColor =
                 dataGridViewBHRbuffer.Columns[0].DefaultCellStyle.BackColor =
                 dataGridViewMatrixOfDistances.Rows[0].DefaultCellStyle.BackColor =
                 dataGridViewMatrixOfDistances.Columns[0].DefaultCellStyle.BackColor = Color.LightGray;
         }
 
+        private void numericUpDownMetrik_ValueChanged(object sender, EventArgs e)
+        {
+            int number = Convert.ToInt32(numericUpDownNumber.Value);
+            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
+
+            DataTable dt = new DataTable();
+
+            for (int i = 0; i <= metrik; i++)
+            {
+                dt.Columns.Add(i.ToString());
+            }
+            for (int i = 0; i <= number; i++)
+            {
+                dt.Rows.Add();
+            }
+
+            dataGridViewMatrixDataset.DataSource = dt;
+
+            for (int i = 0; i <= number; i++)
+            {
+                dataGridViewMatrixDataset[0, i].Value = i;
+                for (int j = 0; j <= metrik; j++)
+                {
+                    dataGridViewMatrixDataset[j, 0].Value = j;
+                    dataGridViewMatrixDataset.Columns[j].Width = 60;
+                    dataGridViewMatrixDataset.Rows[i].Height = 30;
+                }
+            }
+
+            dataGridViewMatrixDataset[0, 0].Value = "№";
+            dataGridViewMatrixDataset.Rows[0].DefaultCellStyle.BackColor =
+            dataGridViewMatrixDataset.Columns[0].DefaultCellStyle.BackColor = Color.LightGray;
+
+        }
+
         private void btnTest_Click(object sender, EventArgs e)
         {
-            double[,] testMatrix = new double[,] {
+            testMatrix = new double[,] {
                 {0,2.2,2.2,5.8,7.6,5,5.1,5.1,8.5,10,8.9,10.8},
                 {2.2,0,3.2,3.6,5.4,3.2,5,4.1,6.4,7.8,7.3,8.9},
                 {2.2,3.2,0,6.1,8.1,4.5,3,3.6,8.1,9.8,7.8,9.9},
@@ -164,9 +197,106 @@ namespace classification_lab1
             // last step (add data to dataGrid)
             for (int i = 0; i < bufferB.Count; i++)
             {
-                dataGridViewBHRbuffer[i + 2, 1].Value = bufferB.ElementAt(i);
-                dataGridViewBHRbuffer[i + 2, 2].Value = bufferH.ElementAt(i);
-                dataGridViewBHRbuffer[i + 2, 3].Value = bufferR.ElementAt(i);
+                dataGridViewBHRbuffer[i + 2, 1].Value = bufferB.ElementAt(bufferB.Count - i - 1);
+                dataGridViewBHRbuffer[i + 2, 2].Value = bufferH.ElementAt(bufferB.Count - i - 1);
+                dataGridViewBHRbuffer[i + 2, 3].Value = bufferR.ElementAt(bufferB.Count - i - 1);
+            }
+        }
+
+        private void btnLoadDataset_Click(object sender, EventArgs e)
+        {
+            var data = File.ReadAllLines("iris.txt");
+
+            numericUpDownNumber.Value = data.Length;
+            numericUpDownMetrik.Value = data[0].Split(',').Length;
+
+            int number = Convert.ToInt32(numericUpDownNumber.Value);
+            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
+
+            testDataset = new double[number, metrik];
+
+            for (int i = 0; i < number; i++)
+            {
+                for (int j = 0; j < metrik; j++)
+                {
+                    testDataset[i, j] = Convert.ToDouble(data[i].Split(',')[j]);
+                    dataGridViewMatrixDataset[j + 1, i + 1].Value = testDataset[i, j];
+                }
+            }
+        }
+
+        private void btnGetMatrixOfDistances_Click(object sender, EventArgs e)
+        {
+            int number = Convert.ToInt32(numericUpDownNumber.Value);
+            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
+
+            testMatrix = new double[number, number];
+
+            for (int i = 0; i < number; i++)
+            {
+                for (int j = 0; j < number; j++)
+                {
+                    if (i == j)
+                        testMatrix[i, j] = 0;
+                    else
+                    {
+                        double[] firstPoint = Enumerable.Range(0, metrik)
+                            .Select(k => testDataset[i, k])
+                            .ToArray();
+                        double[] lastPoint = Enumerable.Range(0, metrik)
+                            .Select(k => testDataset[j, k])
+                            .ToArray();
+
+                        testMatrix[i, j] = GetLength(firstPoint, lastPoint);
+                        dataGridViewMatrixOfDistances[i + 1, j + 1].Value = testMatrix[i, j];
+                    }
+                }
+            }
+        }
+
+        private double GetLength(double[] firstPoint, double[] lastPoint)
+        {
+            double result = 0;
+
+            for (int i = 0; i < firstPoint.Length; i++)
+            {
+                result += Math.Pow(firstPoint[i] - lastPoint[i], 2);
+            }
+            return 10 * Math.Sqrt(result);
+        }
+
+        private void btnNormalizationOfData_Click(object sender, EventArgs e)
+        {
+            List<double[]> minmaxvalues = new List<double[]>();
+
+            int number = Convert.ToInt32(numericUpDownNumber.Value);
+            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
+
+            // find min and max values
+            for (int j = 0; j < metrik; j++)
+            {
+                double min = testDataset[0, j], max = testDataset[0, j];
+                for (int i = 0; i < number; i++)
+                {
+                    if (testDataset[i, j] < min)
+                        min = testDataset[i, j];
+                    if(testDataset[i, j] >= max)
+                        max = testDataset[i, j];
+                }
+                minmaxvalues.Add(new double[] { min, max });
+            }
+
+            // change values
+            for (int j = 0; j < metrik; j++)
+            {
+                var minmax = minmaxvalues.ElementAt(j);
+                for (int i = 0; i < number; i++)
+                {
+                    //testDataset[i, j] = (testDataset[i, j] - minmax[0]) / (minmax[1] - minmax[0]);
+                    testDataset[i, j] -= minmax[0];
+                    testDataset[i, j] /= minmax[1] - minmax[0];
+                    dataGridViewMatrixDataset[j + 1, i + 1].Value = testDataset[i, j];
+                }
             }
         }
     }

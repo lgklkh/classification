@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,9 @@ namespace classification_lab1
 {
     public partial class KrabForm : Form
     {
+        double[,] testDataset;
+        double[,] testMatrix;
+
         public KrabForm()
         {
             InitializeComponent();
@@ -52,20 +56,20 @@ namespace classification_lab1
             for (int i = 0; i <= number; i++)
             {
                 dt.Columns.Add(i.ToString());
+                if(i < 8)
+                    dt.Rows.Add();
             }
-            dt.Rows.Add(); dt.Rows.Add(); dt.Rows.Add(); dt.Rows.Add(); dt.Rows.Add(); dt.Rows.Add(); dt.Rows.Add();
 
             dataGridViewResult.DataSource = dt;
-
-            dataGridViewResult.Columns[0].Width = 30;
-            dataGridViewResult[0, 0].Value = "i/j";
-            dataGridViewResult[0, 1].Value = "R(i,j)";
-            dataGridViewResult[0, 2].Value = "D";
-            dataGridViewResult[0, 3].Value = "H";
-            dataGridViewResult[0, 4].Value = "R";
-            dataGridViewResult[0, 5].Value = "G";
-            dataGridViewResult[0, 6].Value = "L";
-
+          
+            dataGridViewResult[0, 0].Value = "i->j";
+            dataGridViewResult[0, 1].Value = "№";
+            dataGridViewResult[0, 2].Value = "R(i,j)";
+            dataGridViewResult[0, 3].Value = "D";
+            dataGridViewResult[0, 4].Value = "H";
+            dataGridViewResult[0, 5].Value = "R";
+            dataGridViewResult[0, 6].Value = "G";
+            dataGridViewResult[0, 7].Value = "L";
 
             for (int i = 0; i <= number; i++)
             {
@@ -76,26 +80,19 @@ namespace classification_lab1
                 dataGridViewBHRbuffer[i, 0].Value = i;
                 dataGridViewMatrixOfDistances.Columns[i].Width =
                     dataGridViewMatrixOfDistances.Rows[i].Height =
-                    dataGridViewBHRbuffer.Columns[i].Width = 25;
-                dataGridViewBHRbuffer[0, 0].Value = "i";
+                    dataGridViewBHRbuffer.Columns[i].Width = 30;
+                dataGridViewResult.Columns[i].Width = 50;
+                dataGridViewBHRbuffer[0, 0].Value = "№";
                 dataGridViewBHRbuffer[0, 1].Value = "B(i)";
                 dataGridViewBHRbuffer[0, 2].Value = "H(i)";
                 dataGridViewBHRbuffer[0, 3].Value = "R(i)";
-                dataGridViewBHRbuffer[1, 1].Value = "1";
-                dataGridViewBHRbuffer[1, 2].Value = "1";
+                dataGridViewBHRbuffer[1, 1].Value = number;
+                dataGridViewBHRbuffer[1, 2].Value = number;
                 dataGridViewBHRbuffer[1, 3].Value = "0";
-            }
 
-            dataGridViewMatrixOfDistances.Height =
-                dataGridViewMatrixOfDistances.Width =
-                dataGridViewBHRbuffer.Width = (number + 1) * 25 + 3;
-            dataGridViewBHRbuffer.Height = 4 * 25 - 8;
-            dataGridViewResult.Height = 6 * 25 + 7;
-            dataGridViewResult.Width = 30;
-            dataGridViewBHRbuffer.Location =
-                new Point(dataGridViewMatrixOfDistances.Location.X, dataGridViewMatrixOfDistances.Location.Y + dataGridViewMatrixOfDistances.Height + 30);
-            dataGridViewResult.Location = 
-                new Point(dataGridViewMatrixOfDistances.Location.X + dataGridViewMatrixOfDistances.Height + 30, dataGridViewMatrixOfDistances.Location.Y);
+                if(i < 8)
+                    dataGridViewResult.Rows[i].Height = 20;
+            }
 
             dataGridViewBHRbuffer.Rows[0].DefaultCellStyle.BackColor =
                 dataGridViewBHRbuffer.Columns[0].DefaultCellStyle.BackColor =
@@ -103,6 +100,42 @@ namespace classification_lab1
                 dataGridViewMatrixOfDistances.Columns[0].DefaultCellStyle.BackColor =
                 dataGridViewResult.Columns[0].DefaultCellStyle.BackColor =
                 dataGridViewResult.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
+            dataGridViewResult.Columns[0].Width = 30;
+        }
+
+        private void numericUpDownMetrik_ValueChanged(object sender, EventArgs e)
+        {
+            int number = Convert.ToInt32(numericUpDownNumber.Value);
+            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
+
+            DataTable dt = new DataTable();
+
+            for (int i = 0; i <= metrik; i++)
+            {
+                dt.Columns.Add(i.ToString());
+            }
+            for (int i = 0; i <= number; i++)
+            {
+                dt.Rows.Add();
+            }
+
+            dataGridViewMatrixDataset.DataSource = dt;
+
+            for (int i = 0; i <= number; i++)
+            {
+                dataGridViewMatrixDataset[0, i].Value = i;
+                for (int j = 0; j <= metrik; j++)
+                {
+                    dataGridViewMatrixDataset[j, 0].Value = j;
+                    dataGridViewMatrixDataset.Columns[j].Width = 60;
+                    dataGridViewMatrixDataset.Rows[i].Height = 30;
+                }
+            }
+
+            dataGridViewMatrixDataset[0, 0].Value = "№";
+            dataGridViewMatrixDataset.Rows[0].DefaultCellStyle.BackColor =
+            dataGridViewMatrixDataset.Columns[0].DefaultCellStyle.BackColor = Color.LightGray;
+
         }
 
         private void btnTest_Click(object sender, EventArgs e)
@@ -190,70 +223,97 @@ namespace classification_lab1
             // last step (add data to dataGrid)
             for (int i = 0; i < bufferB.Count; i++)
             {
-                dataGridViewBHRbuffer[i + 2, 1].Value = bufferB.ElementAt(i);
-                dataGridViewBHRbuffer[i + 2, 2].Value = bufferH.ElementAt(i);
-                dataGridViewBHRbuffer[i + 2, 3].Value = bufferR.ElementAt(i);
+                dataGridViewBHRbuffer[i + 2, 1].Value = bufferB.ElementAt(bufferB.Count - i - 1);
+                dataGridViewBHRbuffer[i + 2, 2].Value = bufferH.ElementAt(bufferB.Count - i - 1);
+                dataGridViewBHRbuffer[i + 2, 3].Value = bufferR.ElementAt(bufferB.Count - i - 1);
             }
         }
 
-        private double R(List<double> bufferR, List<int> bufferGap)
+        private double R(List<PointRelation> buffer)
         {
-            var bufferSet = new List<int>();
-            bufferSet.AddRange(bufferGap);
-            bufferSet.Add(-1);
-            bufferSet.Add(bufferR.Count);
-            bufferSet.Sort();
-
-            double setSum = 0;
-            for(int i = 1; i < bufferSet.Count; i++)
+            double sum = 0, sumi = 0;
+            double res = 0, resi = 0;
+            foreach (var item in buffer)
             {
-                int firstIndex = bufferSet.ElementAt(i - 1), lastIndex = bufferSet.ElementAt(i);
-                var subSet = bufferR.GetRange(firstIndex + 1, lastIndex - firstIndex - 1);
-                setSum += (subSet.Count > 0) ? subSet.Average() : bufferR.Last();
+                if (item.value)
+                {
+                    sum += item.length;
+                    sumi++;
+                }
+                else
+                {
+                    res += sum / sumi;
+                    resi++;
+                    sum = sumi = 0;
+                }
             }
-            return setSum / (bufferSet.Count - 1);
+            return res / resi;
         }
 
-        private double H(List<double> bufferR, List<int> bufferGap)
+        private double H(List<PointRelation> buffer)
         {
-            var bufferSet = new List<int>();
-            bufferSet.AddRange(bufferGap);
-            bufferSet.Add(-1);
-            bufferSet.Add(bufferR.Count);
-            bufferSet.Sort();
+            int count = buffer.Where(x => x.value == false).Count() + 1;
 
-            double setRes = 1;
-            for (int i = 1; i < bufferSet.Count; i++)
+            double res = 1, resi = 0;
+            foreach (var item in buffer)
             {
-                int firstIndex = bufferSet.ElementAt(i - 1), lastIndex = bufferSet.ElementAt(i);
-                setRes *= lastIndex - firstIndex;
+                if (item.value)
+                {
+                    resi++;
+                }
+                else
+                {
+                    res *= (resi + 1);
+                    resi = 0;
+                }
             }
-            return Math.Pow(bufferSet.Count - 1, bufferSet.Count - 1) * (setRes / (Math.Pow(bufferR.Count + 1, bufferSet.Count - 1)));
+            if(resi != 0)
+                res *= (resi + 1);
+            return Math.Pow(count, count) * res / Math.Pow(buffer.Count + 1, count);
         }
 
-        private double D(List<double> bufferR, List<int> bufferGap)
+        private double D(List<PointRelation> buffer)
         {
+            int count = buffer.Where(x => x.value == false).Count();
+            double sum = buffer.Where(x => x.value == false).Sum(x => x.length);
+
+            return sum / count;
+        }
+
+        private double G(List<PointRelation> buffer)
+        {
+            int count = buffer.Where(x => x.value == false).Count();
             double sum = 0;
-
-            foreach (var item in bufferGap)
-                sum += bufferR.ElementAt(item);
-
-            return sum / bufferGap.Count;
-        }
-
-        private double G(List<double> bufferR, List<int> bufferGap)
-        {
-            double sum = 0;
-            foreach(var item in bufferGap)
+            foreach (var item in buffer)
             {
-                sum += bufferR.Min() / bufferR.ElementAt(item);
+                if(!item.value)
+                    sum += buffer.Where(x => x.length != 0).Min(x => x.length) / item.length;
             }
-            return Math.Round(sum / (bufferGap.Count), 3);
+
+            return sum / count;
         }
 
         private double L(double r, double h, double d, double g)
         {
             return Math.Log((d * h) / (g * r));
+        }
+
+        public struct PointRelation
+        {
+            public bool value;
+            public int index;
+            public int from;
+            public int to;
+            public double length;
+
+            public PointRelation(int index, int from, int to, double length)
+            {
+                value = true;
+                this.index = index;
+                this.from = from;
+                this.to = to;
+                this.length = length;
+            }    
         }
 
         private void btnToDo_Click(object sender, EventArgs e)
@@ -263,51 +323,148 @@ namespace classification_lab1
             List<double> bufferR = new List<double>();
             ToDoPrima(ref bufferB, ref bufferH, ref bufferR);
 
-            List<int> bufferGap = new List<int>();
+            List<PointRelation> pointRelations = new List<PointRelation>();
+
+            for(int i = 0; i < bufferB.Count; i++)
+            {
+                pointRelations.Add(new PointRelation(bufferB.Count - i + 1, bufferB[i], bufferH[i], bufferR[i]));
+            }
+
 
             for (int j = 1; true; j++)
             {
-                var maxElem = new { index = -1, value = -1.0 };
-                for (int i = 0; i < bufferR.Count; i++)
-                {
-                    if (bufferR.ElementAt(i) > maxElem.value && !bufferGap.Contains(i))
-                    {
-                        maxElem = new { index = i, value = bufferR.ElementAt(i) };
-                    }
-                }
-                bufferGap.Add(maxElem.index);
+                var tmp = pointRelations.Where(x => x.value == true)
+                    .Where(x => pointRelations.IndexOf(x) != 0)
+                    .Where(x => pointRelations.IndexOf(x) < pointRelations.Count - 1)
+                    .Where(x => pointRelations.ElementAt(pointRelations.IndexOf(x) + 1).value == true)
+                    .Where(x => pointRelations.ElementAt(pointRelations.IndexOf(x) - 1).value == true)
+                    .OrderByDescending(x => x.length)
+                    .FirstOrDefault();
+                int index = pointRelations.IndexOf(tmp);
+                tmp.value = false;
+                pointRelations[index] = tmp;
 
-                double r = R(bufferR, bufferGap), h = H(bufferR, bufferGap),
-                    d = D(bufferR, bufferGap), g = G(bufferR, bufferGap);
+                double r = R(pointRelations);
+                double h = H(pointRelations);
+                double d = D(pointRelations);
+                double g = G(pointRelations);
                 double l = L(r, h, d, g);
 
-                dataGridViewResult.Columns[j].Width = 45;
-                dataGridViewResult.Width = j * 45 + 30;
-                dataGridViewResult[j, 0].Value = bufferB.ElementAt(bufferGap.Last()) + "-" + bufferH.ElementAt(bufferGap.Last());
-                dataGridViewResult[j, 1].Value = bufferR.ElementAt(bufferGap.Last());
-                dataGridViewResult[j, 2].Value = Math.Round(d, 3);
-                dataGridViewResult[j, 3].Value = Math.Round(h, 3);
-                dataGridViewResult[j, 4].Value = Math.Round(r, 3);
-                dataGridViewResult[j, 5].Value = Math.Round(g, 3);
-                dataGridViewResult[j, 6].Value = Math.Round(l, 3);
+                dataGridViewResult.Width = 31 + 50 * j;
+                dataGridViewResult[j, 0].Value = tmp.from + "->" + tmp.to;
+                dataGridViewResult[j, 1].Value = tmp.index;
+                dataGridViewResult[j, 2].Value = Math.Round(tmp.length, 3);
+                dataGridViewResult[j, 3].Value = Math.Round(d, 3);
+                dataGridViewResult[j, 4].Value = Math.Round(h, 3);
+                dataGridViewResult[j, 5].Value = Math.Round(r, 3);
+                dataGridViewResult[j, 6].Value = Math.Round(g, 3);
+                dataGridViewResult[j, 7].Value = Math.Round(l, 3);
 
+                dataGridViewBHRbuffer.Columns[tmp.index].DefaultCellStyle.BackColor = Color.LightGreen;
 
-                if (j > 1)
+                if (j > 1 && l < Convert.ToDouble(dataGridViewResult[j - 1, 7].Value))
                 {
-                    if (l < Convert.ToDouble(dataGridViewResult[j - 1, 6].Value))
+                    dataGridViewBHRbuffer.Columns[tmp.index].DefaultCellStyle.BackColor = Color.Pink;
+                    break;
+                }
+            }
+        }
+
+        private void btnLoadDataset_Click(object sender, EventArgs e)
+        {
+            var data = File.ReadAllLines("nba_pos.csv");
+
+            numericUpDownNumber.Value = data.Length;
+            numericUpDownMetrik.Value = data[0].Split(',').Length;
+
+            int number = Convert.ToInt32(numericUpDownNumber.Value);
+            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
+
+            testDataset = new double[number, metrik];
+
+            for (int i = 0; i < number; i++)
+            {
+                for (int j = 0; j < metrik; j++)
+                {
+                    testDataset[i, j] = Convert.ToDouble(data[i].Split(',')[j]);
+                    dataGridViewMatrixDataset[j + 1, i + 1].Value = testDataset[i, j];
+                }
+            }
+        }
+
+        private void btnGetMatrixOfDistances_Click(object sender, EventArgs e)
+        {
+            int number = Convert.ToInt32(numericUpDownNumber.Value);
+            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
+
+            testMatrix = new double[number, number];
+
+            for (int i = 0; i < number; i++)
+            {
+                for (int j = 0; j < number; j++)
+                {
+                    if (i == j)
+                        testMatrix[i, j] = 0;
+                    else
                     {
-                        bufferGap.RemoveAt(bufferGap.Count - 1);
-                        break;
+                        double[] firstPoint = Enumerable.Range(0, metrik)
+                            .Select(k => testDataset[i, k])
+                            .ToArray();
+                        double[] lastPoint = Enumerable.Range(0, metrik)
+                            .Select(k => testDataset[j, k])
+                            .ToArray();
+
+                        testMatrix[i, j] = GetLength(firstPoint, lastPoint);
+                        dataGridViewMatrixOfDistances[i + 1, j + 1].Value = testMatrix[i, j];
                     }
                 }
-
             }
+        }
 
-            foreach(var item in bufferGap)
+        private double GetLength(double[] firstPoint, double[] lastPoint)
+        {
+            double result = 0;
+
+            for (int i = 0; i < firstPoint.Length; i++)
             {
-                dataGridViewBHRbuffer.Columns[item + 2].DefaultCellStyle.BackColor = Color.Pink;
+                result += Math.Pow(firstPoint[i] - lastPoint[i], 2);
+            }
+            return 10 * Math.Sqrt(result);
+        }
+
+        private void btnNormalizationOfData_Click(object sender, EventArgs e)
+        {
+            List<double[]> minmaxvalues = new List<double[]>();
+
+            int number = Convert.ToInt32(numericUpDownNumber.Value);
+            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
+
+            // find min and max values
+            for (int j = 0; j < metrik; j++)
+            {
+                double min = testDataset[0, j], max = testDataset[0, j];
+                for (int i = 0; i < number; i++)
+                {
+                    if (testDataset[i, j] < min)
+                        min = testDataset[i, j];
+                    if (testDataset[i, j] >= max)
+                        max = testDataset[i, j];
+                }
+                minmaxvalues.Add(new double[] { min, max });
             }
 
+            // change values
+            for (int j = 0; j < metrik; j++)
+            {
+                var minmax = minmaxvalues.ElementAt(j);
+                for (int i = 0; i < number; i++)
+                {
+                    //testDataset[i, j] = (testDataset[i, j] - minmax[0]) / (minmax[1] - minmax[0]);
+                    testDataset[i, j] -= minmax[0];
+                    testDataset[i, j] /= minmax[1] - minmax[0];
+                    dataGridViewMatrixDataset[j + 1, i + 1].Value = testDataset[i, j];
+                }
+            }
         }
     }
 }

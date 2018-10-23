@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,9 @@ namespace classification_lab1
 {
     public partial class SpectrForm : Form
     {
+        double[,] testDataset;
+        double[,] testMatrix;
+
         public SpectrForm()
         {
             InitializeComponent();
@@ -21,6 +25,9 @@ namespace classification_lab1
         private void SpectrForm_Load(object sender, EventArgs e)
         {
             numericUpDownNumber.Value = 15;
+
+            zedGraph.PointValueEvent +=
+                new ZedGraphControl.PointValueHandler(zedGraph_PointValueEvent);
         }
 
         private void numericUpDownNumber_ValueChanged(object sender, EventArgs e)
@@ -65,54 +72,71 @@ namespace classification_lab1
                 dataGridViewSpectrumOfBonds[1, 2].Value = "0";
             }
 
-            dataGridViewMatrixOfDistances.Height =
-                dataGridViewMatrixOfDistances.Width =
-                dataGridViewSpectrumOfBonds.Width = (number + 1) * 30 + 3;
-            dataGridViewSpectrumOfBonds.Height = 3 * 30 - 21;
-            dataGridViewSpectrumOfBonds.Location =
-                new Point(dataGridViewMatrixOfDistances.Location.X, dataGridViewMatrixOfDistances.Location.Y + dataGridViewMatrixOfDistances.Height + 30);
+            dataGridViewSpectrumOfBonds.DefaultCellStyle.BackColor = Color.White;
             dataGridViewSpectrumOfBonds.Rows[0].DefaultCellStyle.BackColor =
                 dataGridViewSpectrumOfBonds.Columns[0].DefaultCellStyle.BackColor =
                 dataGridViewMatrixOfDistances.Rows[0].DefaultCellStyle.BackColor =
                 dataGridViewMatrixOfDistances.Columns[0].DefaultCellStyle.BackColor = Color.LightGray;
         }
 
+        private void numericUpDownMetrik_ValueChanged(object sender, EventArgs e)
+        {
+            int number = Convert.ToInt32(numericUpDownNumber.Value);
+            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
+
+            DataTable dt = new DataTable();
+
+            for (int i = 0; i <= metrik; i++)
+            {
+                dt.Columns.Add(i.ToString());
+            }
+            for (int i = 0; i <= number; i++)
+            {
+                dt.Rows.Add();
+            }
+
+            dataGridViewMatrixDataset.DataSource = dt;
+
+            for (int i = 0; i <= number; i++)
+            {
+                dataGridViewMatrixDataset[0, i].Value = i;
+                for (int j = 0; j <= metrik; j++)
+                {
+                    dataGridViewMatrixDataset[j, 0].Value = j;
+                    dataGridViewMatrixDataset.Columns[j].Width = 60;
+                    dataGridViewMatrixDataset.Rows[i].Height = 30;
+                }
+            }
+
+            dataGridViewMatrixDataset[0, 0].Value = "№";
+            dataGridViewMatrixDataset.Rows[0].DefaultCellStyle.BackColor =
+            dataGridViewMatrixDataset.Columns[0].DefaultCellStyle.BackColor = Color.LightGray;
+
+        }
+
         private void btnDrawGraph_Click(object sender, EventArgs e)
         {
-            Graphics gpanel = Graphics.FromHwnd(panelGraph.Handle);
-            gpanel.Clear(SystemColors.Control);
-            var startSys = new { x = panelGraph.Width / 12, y = panelGraph.Height / 12 };
-
-            // draw coordinate grid
-            gpanel.DrawLine(new Pen(Color.Black, 3), startSys.x, startSys.y,
-                startSys.x, 11 * startSys.y);
-            gpanel.DrawLine(new Pen(Color.Black, 3), startSys.x, 11 * startSys.y,
-                11 * startSys.x, 11 * startSys.y);
-
-            // draw graph
-            int num = Convert.ToInt32(numericUpDownNumber.Value);
-            List<double> blockC = new List<double>();
-            for(int i = 1; i <= num; i++)            
-                blockC.Add(Convert.ToDouble(dataGridViewSpectrumOfBonds[i, 2].Value));
-
-            List<PointF> points = new List<PointF>();
-            for (int i = 1; i <= num; i++)
+            GraphPane pane = zedGraph.GraphPane;
+            pane.CurveList.Clear();
+            pane.Title.Text = "Спектр близкостей";
+            pane.YAxis.Title.Text = "Величина зв'язку";
+            pane.XAxis.IsVisible = false;
+            pane.XAxis.Title.Text = "Номер ітерації";
+            PointPairList list = new PointPairList();
+            for (int i = 1; i <= numericUpDownNumber.Value; i++)
             {
-                int x = Convert.ToInt32(dataGridViewSpectrumOfBonds[i, 0].Value);
-                double y = Convert.ToDouble(dataGridViewSpectrumOfBonds[i, 2].Value);
-                PointF dot = new PointF(startSys.x - 6 + x * (10 * startSys.x / num),
-                    Convert.ToSingle(11 * startSys.y - 6 - y * (10 * startSys.x / blockC.Max())));
-                points.Add(new PointF(dot.X + 6, dot.Y + 6));
-                gpanel.FillEllipse(Brushes.Blue, dot.X, dot.Y, 12, 12);
-                gpanel.DrawString(dataGridViewSpectrumOfBonds[i, 1].Value.ToString(), new Font("Arial", 14),
-                    new SolidBrush(Color.Black), dot.X, dot.Y + 20);
+                list.Add(Convert.ToDouble(dataGridViewSpectrumOfBonds[i, 0].Value), Convert.ToDouble(dataGridViewSpectrumOfBonds[i, 2].Value));
             }
-            gpanel.DrawLines(new Pen(Color.Blue, 2), points.ToArray());
+
+            LineItem myCurve = pane.AddCurve("Спектр близкостей", list, Color.Blue, SymbolType.Star);
+
+            zedGraph.AxisChange();
+            zedGraph.Invalidate();
         }
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-            double[,] testMatrix = new double[,] {
+            testMatrix = new double[,] {
                 {0,5,7,1.4,5,3.5,1.6,1.4,1.2,1.3,1.7,1.6,1.4,1.3,1.2},
                 {5,0,7,2,3.5,5,2.2,1.9,1.6,1.7,2,1.7,1.6,1.4,1.4 },
                 {7,7,0,1.7,7,7,2,1.6,1.4,1.6,2.2,2,1.7,1.6,1.5 },
@@ -173,14 +197,135 @@ namespace classification_lab1
                 dataGridViewSpectrumOfBonds[blockB.Count, 2].Value = xNext.distance;
                 xNext = new { index = 0, distance = 0.0 };
 
-                if(blockB.Count > 2 && Convert.ToDouble(dataGridViewSpectrumOfBonds[blockB.Count - 2, 2].Value) >
-                    Convert.ToDouble(dataGridViewSpectrumOfBonds[blockB.Count - 1, 2].Value) &&
-                    Convert.ToDouble(dataGridViewSpectrumOfBonds[blockB.Count - 1, 2].Value) < 
-                    Convert.ToDouble(dataGridViewSpectrumOfBonds[blockB.Count, 2].Value))
+            }
+            GetBreakPoint();
+        }
+
+        public void GetBreakPoint()
+        {
+            int count = (int)numericUpDownCount.Value - 1;
+
+            List<int> result = new List<int>();
+            for (int j = 0; j < count; j++)
+            {
+                var maxValue = new { index = -1, value = 100.0 };
+                for (int i = 2; i < numericUpDownNumber.Value; i++)
                 {
-                    dataGridViewSpectrumOfBonds.Columns[blockB.Count - 1].DefaultCellStyle.BackColor = Color.Pink;
+                    if(Convert.ToDouble(dataGridViewSpectrumOfBonds[i, 2].Value) < maxValue.value 
+                        && !result.Contains(i) && !result.Contains(i - 1) && !result.Contains(i + 1))
+                    {
+                        maxValue = new { index = i, value = Convert.ToDouble(dataGridViewSpectrumOfBonds[i, 2].Value) };
+                    }
                 }
-            }   
+                result.Add(maxValue.index);
+                dataGridViewSpectrumOfBonds.Columns[maxValue.index].DefaultCellStyle.BackColor = Color.Pink;
+            }
+        }
+
+        private void btnLoadDataset_Click(object sender, EventArgs e)
+        {
+            var data = File.ReadAllLines("nba_pos.csv");
+
+            numericUpDownNumber.Value = data.Length;
+            numericUpDownMetrik.Value = data[0].Split(',').Length;
+
+            int number = Convert.ToInt32(numericUpDownNumber.Value);
+            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
+
+            testDataset = new double[number, metrik];
+
+            for (int i = 0; i < number; i++)
+            {
+                for(int j = 0; j < metrik; j++)
+                {
+                    testDataset[i, j] = Convert.ToDouble(data[i].Split(',')[j]);
+                    dataGridViewMatrixDataset[j + 1, i + 1].Value = testDataset[i, j];
+                }
+            }
+        }
+
+        private void btnGetMatrixOfDistances_Click(object sender, EventArgs e)
+        {
+            int number = Convert.ToInt32(numericUpDownNumber.Value);
+            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
+
+            testMatrix = new double[number, number];
+
+            for(int i = 0; i < number; i++)
+            {
+                for(int j = 0; j < number; j++)
+                {
+                    if (i == j)
+                        testMatrix[i, j] = 0;
+                    else
+                    {
+                        double[] firstPoint = Enumerable.Range(0, metrik)
+                            .Select(k => testDataset[i, k])
+                            .ToArray();
+                        double[] lastPoint = Enumerable.Range(0, metrik)
+                            .Select(k => testDataset[j, k])
+                            .ToArray();
+
+                        testMatrix[i, j] = GetLength(firstPoint, lastPoint);
+                        dataGridViewMatrixOfDistances[i + 1, j + 1].Value = testMatrix[i, j];
+                    }
+                }
+            }
+        }
+
+        private double GetLength(double[] firstPoint, double[] lastPoint)
+        {
+            double result = 0;
+
+            for(int i = 0; i < firstPoint.Length; i++)
+            {
+                result += Math.Pow(firstPoint[i] - lastPoint[i], 2);
+            }
+            return 1.0 / Math.Sqrt(result);
+        }
+
+        private string zedGraph_PointValueEvent(ZedGraphControl sender, GraphPane pane, CurveItem curve, int iPt)
+        {
+            PointPair point = curve[iPt];
+
+            string result = string.Format("Точка: {1}\nІтерація: {0}\nВеличина зв'язку: {2:F2}", point.X, Convert.ToDouble(dataGridViewSpectrumOfBonds[(int) point.X + 1, 1].Value), point.Y);
+
+            return result;
+        }
+
+        private void btnNormalizationOfData_Click(object sender, EventArgs e)
+        {
+            List<double[]> minmaxvalues = new List<double[]>();
+
+            int number = Convert.ToInt32(numericUpDownNumber.Value);
+            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
+
+            // find min and max values
+            for (int j = 0; j < metrik; j++)
+            {
+                double min = testDataset[0, j], max = testDataset[0, j];
+                for (int i = 0; i < number; i++)
+                {
+                    if (testDataset[i, j] < min)
+                        min = testDataset[i, j];
+                    if (testDataset[i, j] >= max)
+                        max = testDataset[i, j];
+                }
+                minmaxvalues.Add(new double[] { min, max });
+            }
+
+            // change values
+            for (int j = 0; j < metrik; j++)
+            {
+                var minmax = minmaxvalues.ElementAt(j);
+                for (int i = 0; i < number; i++)
+                {
+                    //testDataset[i, j] = (testDataset[i, j] - minmax[0]) / (minmax[1] - minmax[0]);
+                    testDataset[i, j] -= minmax[0];
+                    testDataset[i, j] /= minmax[1] - minmax[0];
+                    dataGridViewMatrixDataset[j + 1, i + 1].Value = testDataset[i, j];
+                }
+            }
         }
     }
 }

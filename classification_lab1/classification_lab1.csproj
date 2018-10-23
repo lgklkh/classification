@@ -72,6 +72,7 @@
     <Compile Include="mainForm.Designer.cs">
       <DependentUpon>mainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="nPoint.cs" />
     <Compile Include="PrimaForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +87,7 @@
     <Compile Include="SpectrForm.Designer.cs">
       <DependentUpon>SpectrForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Taxon.cs" />
     <EmbeddedResource Include="Forel2Form.resx">
       <DependentUpon>Forel2Form.cs</DependentUpon>
     </EmbeddedResource>
@@ -126,9 +128,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="License-LGPL.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
