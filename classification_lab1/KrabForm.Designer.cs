@@ -43,6 +43,10 @@
             this.numericUpDownNumber = new System.Windows.Forms.NumericUpDown();
             this.btnToDo = new System.Windows.Forms.Button();
             this.btnTest = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.tbValuep = new System.Windows.Forms.TextBox();
+            this.tbValuer = new System.Windows.Forms.TextBox();
+            this.cbMetrik = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResult)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMatrixDataset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMatrixOfDistances)).BeginInit();
@@ -62,13 +66,13 @@
             this.dataGridViewResult.ColumnHeadersHeight = 20;
             this.dataGridViewResult.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridViewResult.ColumnHeadersVisible = false;
-            this.dataGridViewResult.Location = new System.Drawing.Point(5, 487);
+            this.dataGridViewResult.Location = new System.Drawing.Point(5, 514);
             this.dataGridViewResult.Name = "dataGridViewResult";
             this.dataGridViewResult.RowHeadersVisible = false;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.dataGridViewResult.RowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewResult.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewResult.Size = new System.Drawing.Size(821, 179);
+            this.dataGridViewResult.Size = new System.Drawing.Size(10, 179);
             this.dataGridViewResult.TabIndex = 21;
             // 
             // dataGridViewMatrixDataset
@@ -132,7 +136,7 @@
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.dataGridViewBHRbuffer.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewBHRbuffer.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.dataGridViewBHRbuffer.Size = new System.Drawing.Size(822, 108);
+            this.dataGridViewBHRbuffer.Size = new System.Drawing.Size(822, 133);
             this.dataGridViewBHRbuffer.TabIndex = 45;
             // 
             // btnNormalizationOfData
@@ -234,11 +238,64 @@
             this.btnTest.UseVisualStyleBackColor = true;
             this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(757, 629);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(51, 39);
+            this.btnCancel.TabIndex = 58;
+            this.btnCancel.Text = "X";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // tbValuep
+            // 
+            this.tbValuep.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbValuep.Location = new System.Drawing.Point(761, 597);
+            this.tbValuep.Name = "tbValuep";
+            this.tbValuep.Size = new System.Drawing.Size(46, 26);
+            this.tbValuep.TabIndex = 57;
+            this.tbValuep.Text = "p";
+            this.tbValuep.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // tbValuer
+            // 
+            this.tbValuer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbValuer.Location = new System.Drawing.Point(761, 571);
+            this.tbValuer.Name = "tbValuer";
+            this.tbValuer.Size = new System.Drawing.Size(47, 26);
+            this.tbValuer.TabIndex = 56;
+            this.tbValuer.Text = "r";
+            this.tbValuer.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // cbMetrik
+            // 
+            this.cbMetrik.AutoCompleteCustomSource.AddRange(new string[] {
+            "da",
+            "asd",
+            "ad",
+            "asd"});
+            this.cbMetrik.FormattingEnabled = true;
+            this.cbMetrik.Items.AddRange(new object[] {
+            "Евклидово r",
+            "Квадрат евклидового r",
+            "r городских кварталов",
+            "r Чебешева",
+            "Степенное r"});
+            this.cbMetrik.Location = new System.Drawing.Point(717, 545);
+            this.cbMetrik.Name = "cbMetrik";
+            this.cbMetrik.Size = new System.Drawing.Size(90, 21);
+            this.cbMetrik.TabIndex = 55;
+            // 
             // KrabForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(833, 672);
+            this.ClientSize = new System.Drawing.Size(833, 697);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.tbValuep);
+            this.Controls.Add(this.tbValuer);
+            this.Controls.Add(this.cbMetrik);
             this.Controls.Add(this.btnNormalizationOfData);
             this.Controls.Add(this.btnGetMatrixOfDistances);
             this.Controls.Add(this.btnLoadDataset);
@@ -250,8 +307,8 @@
             this.Controls.Add(this.dataGridViewMatrixOfDistances);
             this.Controls.Add(this.dataGridViewBHRbuffer);
             this.Controls.Add(this.dataGridViewResult);
-            this.MaximumSize = new System.Drawing.Size(849, 711);
-            this.MinimumSize = new System.Drawing.Size(849, 711);
+            this.MaximumSize = new System.Drawing.Size(849, 736);
+            this.MinimumSize = new System.Drawing.Size(849, 736);
             this.Name = "KrabForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "KrabForm";
@@ -263,6 +320,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMetrik)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNumber)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -278,5 +336,9 @@
         private System.Windows.Forms.NumericUpDown numericUpDownNumber;
         private System.Windows.Forms.Button btnToDo;
         private System.Windows.Forms.Button btnTest;
+        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.TextBox tbValuep;
+        private System.Windows.Forms.TextBox tbValuer;
+        private System.Windows.Forms.ComboBox cbMetrik;
     }
 }

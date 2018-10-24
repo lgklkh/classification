@@ -28,41 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.panelGraph = new System.Windows.Forms.Panel();
-            this.btnDrawGraph = new System.Windows.Forms.Button();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridViewClassTable = new System.Windows.Forms.DataGridView();
-            this.numericUpDownRadius = new System.Windows.Forms.NumericUpDown();
             this.btnToDo = new System.Windows.Forms.Button();
-            this.btnTest = new System.Windows.Forms.Button();
-            this.numericUpDownNumberOfDimensions = new System.Windows.Forms.NumericUpDown();
-            this.dataGridViewCoordinateMatrix = new System.Windows.Forms.DataGridView();
-            this.numericUpDownAmountOfPoints = new System.Windows.Forms.NumericUpDown();
+            this.dataGridViewMatrixDataset = new System.Windows.Forms.DataGridView();
+            this.numericUpDownMetrik = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownNumber = new System.Windows.Forms.NumericUpDown();
+            this.btnNormalizationOfData = new System.Windows.Forms.Button();
+            this.btnLoadDataset = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.tbValuep = new System.Windows.Forms.TextBox();
+            this.tbValuer = new System.Windows.Forms.TextBox();
+            this.cbMetrik = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClassTable)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRadius)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNumberOfDimensions)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCoordinateMatrix)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAmountOfPoints)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMatrixDataset)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMetrik)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNumber)).BeginInit();
             this.SuspendLayout();
-            // 
-            // panelGraph
-            // 
-            this.panelGraph.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelGraph.Location = new System.Drawing.Point(588, 92);
-            this.panelGraph.Name = "panelGraph";
-            this.panelGraph.Size = new System.Drawing.Size(480, 480);
-            this.panelGraph.TabIndex = 42;
-            // 
-            // btnDrawGraph
-            // 
-            this.btnDrawGraph.Location = new System.Drawing.Point(424, 12);
-            this.btnDrawGraph.Name = "btnDrawGraph";
-            this.btnDrawGraph.Size = new System.Drawing.Size(75, 23);
-            this.btnDrawGraph.TabIndex = 41;
-            this.btnDrawGraph.Text = "Графік";
-            this.btnDrawGraph.UseVisualStyleBackColor = true;
-            this.btnDrawGraph.Click += new System.EventHandler(this.btnDrawGraph_Click);
             // 
             // dataGridViewClassTable
             // 
@@ -70,38 +53,21 @@
             this.dataGridViewClassTable.AllowUserToDeleteRows = false;
             this.dataGridViewClassTable.AllowUserToResizeColumns = false;
             this.dataGridViewClassTable.AllowUserToResizeRows = false;
+            this.dataGridViewClassTable.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dataGridViewClassTable.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridViewClassTable.ColumnHeadersHeight = 20;
             this.dataGridViewClassTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridViewClassTable.ColumnHeadersVisible = false;
-            this.dataGridViewClassTable.Location = new System.Drawing.Point(68, 47);
+            this.dataGridViewClassTable.Location = new System.Drawing.Point(246, 47);
             this.dataGridViewClassTable.Name = "dataGridViewClassTable";
             this.dataGridViewClassTable.RowHeadersVisible = false;
             this.dataGridViewClassTable.RowHeadersWidth = 40;
             this.dataGridViewClassTable.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGridViewClassTable.RowsDefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dataGridViewClassTable.RowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewClassTable.RowTemplate.Height = 20;
-            this.dataGridViewClassTable.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewClassTable.Size = new System.Drawing.Size(30, 30);
+            this.dataGridViewClassTable.Size = new System.Drawing.Size(748, 582);
             this.dataGridViewClassTable.TabIndex = 40;
-            // 
-            // numericUpDownRadius
-            // 
-            this.numericUpDownRadius.DecimalPlaces = 2;
-            this.numericUpDownRadius.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numericUpDownRadius.Location = new System.Drawing.Point(230, 12);
-            this.numericUpDownRadius.Name = "numericUpDownRadius";
-            this.numericUpDownRadius.Size = new System.Drawing.Size(52, 20);
-            this.numericUpDownRadius.TabIndex = 39;
-            this.numericUpDownRadius.Value = new decimal(new int[] {
-            8,
-            0,
-            0,
-            0});
             // 
             // btnToDo
             // 
@@ -113,118 +79,185 @@
             this.btnToDo.UseVisualStyleBackColor = true;
             this.btnToDo.Click += new System.EventHandler(this.btnToDo_Click);
             // 
-            // btnTest
+            // dataGridViewMatrixDataset
             // 
-            this.btnTest.Location = new System.Drawing.Point(149, 12);
-            this.btnTest.Name = "btnTest";
-            this.btnTest.Size = new System.Drawing.Size(75, 23);
-            this.btnTest.TabIndex = 37;
-            this.btnTest.Text = "Тест";
-            this.btnTest.UseVisualStyleBackColor = true;
-            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
+            this.dataGridViewMatrixDataset.AllowUserToAddRows = false;
+            this.dataGridViewMatrixDataset.AllowUserToDeleteRows = false;
+            this.dataGridViewMatrixDataset.AllowUserToResizeColumns = false;
+            this.dataGridViewMatrixDataset.AllowUserToResizeRows = false;
+            this.dataGridViewMatrixDataset.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dataGridViewMatrixDataset.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dataGridViewMatrixDataset.ColumnHeadersHeight = 20;
+            this.dataGridViewMatrixDataset.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dataGridViewMatrixDataset.ColumnHeadersVisible = false;
+            this.dataGridViewMatrixDataset.Location = new System.Drawing.Point(8, 47);
+            this.dataGridViewMatrixDataset.Name = "dataGridViewMatrixDataset";
+            this.dataGridViewMatrixDataset.RowHeadersVisible = false;
+            this.dataGridViewMatrixDataset.RowHeadersWidth = 40;
+            this.dataGridViewMatrixDataset.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dataGridViewMatrixDataset.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            this.dataGridViewMatrixDataset.RowTemplate.Height = 20;
+            this.dataGridViewMatrixDataset.Size = new System.Drawing.Size(232, 582);
+            this.dataGridViewMatrixDataset.TabIndex = 35;
             // 
-            // numericUpDownNumberOfDimensions
+            // numericUpDownMetrik
             // 
-            this.numericUpDownNumberOfDimensions.Location = new System.Drawing.Point(68, 12);
-            this.numericUpDownNumberOfDimensions.Maximum = new decimal(new int[] {
-            3,
+            this.numericUpDownMetrik.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.numericUpDownMetrik.Location = new System.Drawing.Point(104, 15);
+            this.numericUpDownMetrik.Maximum = new decimal(new int[] {
+            999,
             0,
             0,
             0});
-            this.numericUpDownNumberOfDimensions.Minimum = new decimal(new int[] {
+            this.numericUpDownMetrik.Minimum = new decimal(new int[] {
             2,
             0,
             0,
             0});
-            this.numericUpDownNumberOfDimensions.Name = "numericUpDownNumberOfDimensions";
-            this.numericUpDownNumberOfDimensions.Size = new System.Drawing.Size(34, 20);
-            this.numericUpDownNumberOfDimensions.TabIndex = 36;
-            this.numericUpDownNumberOfDimensions.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            this.numericUpDownNumberOfDimensions.ValueChanged += new System.EventHandler(this.numericUpDownAmountOfPoints_ValueChanged);
-            // 
-            // dataGridViewCoordinateMatrix
-            // 
-            this.dataGridViewCoordinateMatrix.AllowUserToAddRows = false;
-            this.dataGridViewCoordinateMatrix.AllowUserToDeleteRows = false;
-            this.dataGridViewCoordinateMatrix.AllowUserToResizeColumns = false;
-            this.dataGridViewCoordinateMatrix.AllowUserToResizeRows = false;
-            this.dataGridViewCoordinateMatrix.ColumnHeadersHeight = 20;
-            this.dataGridViewCoordinateMatrix.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dataGridViewCoordinateMatrix.ColumnHeadersVisible = false;
-            this.dataGridViewCoordinateMatrix.Location = new System.Drawing.Point(8, 47);
-            this.dataGridViewCoordinateMatrix.Name = "dataGridViewCoordinateMatrix";
-            this.dataGridViewCoordinateMatrix.RowHeadersVisible = false;
-            this.dataGridViewCoordinateMatrix.RowHeadersWidth = 40;
-            this.dataGridViewCoordinateMatrix.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGridViewCoordinateMatrix.RowsDefaultCellStyle = dataGridViewCellStyle16;
-            this.dataGridViewCoordinateMatrix.RowTemplate.Height = 20;
-            this.dataGridViewCoordinateMatrix.Size = new System.Drawing.Size(30, 30);
-            this.dataGridViewCoordinateMatrix.TabIndex = 35;
-            // 
-            // numericUpDownAmountOfPoints
-            // 
-            this.numericUpDownAmountOfPoints.Location = new System.Drawing.Point(8, 12);
-            this.numericUpDownAmountOfPoints.Maximum = new decimal(new int[] {
-            22,
-            0,
-            0,
-            0});
-            this.numericUpDownAmountOfPoints.Minimum = new decimal(new int[] {
+            this.numericUpDownMetrik.Name = "numericUpDownMetrik";
+            this.numericUpDownMetrik.Size = new System.Drawing.Size(90, 20);
+            this.numericUpDownMetrik.TabIndex = 37;
+            this.numericUpDownMetrik.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.numericUpDownMetrik.Value = new decimal(new int[] {
             2,
             0,
             0,
             0});
-            this.numericUpDownAmountOfPoints.Name = "numericUpDownAmountOfPoints";
-            this.numericUpDownAmountOfPoints.Size = new System.Drawing.Size(34, 20);
-            this.numericUpDownAmountOfPoints.TabIndex = 34;
-            this.numericUpDownAmountOfPoints.Value = new decimal(new int[] {
+            this.numericUpDownMetrik.ValueChanged += new System.EventHandler(this.numericUpDownAmountOfPoints_ValueChanged);
+            // 
+            // numericUpDownNumber
+            // 
+            this.numericUpDownNumber.Location = new System.Drawing.Point(8, 15);
+            this.numericUpDownNumber.Maximum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            0});
+            this.numericUpDownNumber.Minimum = new decimal(new int[] {
             2,
             0,
             0,
             0});
-            this.numericUpDownAmountOfPoints.ValueChanged += new System.EventHandler(this.numericUpDownAmountOfPoints_ValueChanged);
+            this.numericUpDownNumber.Name = "numericUpDownNumber";
+            this.numericUpDownNumber.Size = new System.Drawing.Size(90, 20);
+            this.numericUpDownNumber.TabIndex = 36;
+            this.numericUpDownNumber.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.numericUpDownNumber.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericUpDownNumber.ValueChanged += new System.EventHandler(this.numericUpDownAmountOfPoints_ValueChanged);
+            // 
+            // btnNormalizationOfData
+            // 
+            this.btnNormalizationOfData.Location = new System.Drawing.Point(605, 4);
+            this.btnNormalizationOfData.Name = "btnNormalizationOfData";
+            this.btnNormalizationOfData.Size = new System.Drawing.Size(90, 41);
+            this.btnNormalizationOfData.TabIndex = 42;
+            this.btnNormalizationOfData.Text = "Нормалізація даних";
+            this.btnNormalizationOfData.UseVisualStyleBackColor = true;
+            this.btnNormalizationOfData.Click += new System.EventHandler(this.btnNormalizationOfData_Click);
+            // 
+            // btnLoadDataset
+            // 
+            this.btnLoadDataset.Location = new System.Drawing.Point(497, 4);
+            this.btnLoadDataset.Name = "btnLoadDataset";
+            this.btnLoadDataset.Size = new System.Drawing.Size(90, 41);
+            this.btnLoadDataset.TabIndex = 41;
+            this.btnLoadDataset.Text = "Завантажити Dataset";
+            this.btnLoadDataset.UseVisualStyleBackColor = true;
+            this.btnLoadDataset.Click += new System.EventHandler(this.btnLoadDataset_Click);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(1021, 193);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(51, 39);
+            this.btnCancel.TabIndex = 47;
+            this.btnCancel.Text = "X";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // tbValuep
+            // 
+            this.tbValuep.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbValuep.Location = new System.Drawing.Point(1000, 161);
+            this.tbValuep.Name = "tbValuep";
+            this.tbValuep.Size = new System.Drawing.Size(79, 26);
+            this.tbValuep.TabIndex = 46;
+            this.tbValuep.Text = "p";
+            this.tbValuep.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // tbValuer
+            // 
+            this.tbValuer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbValuer.Location = new System.Drawing.Point(1000, 129);
+            this.tbValuer.Name = "tbValuer";
+            this.tbValuer.Size = new System.Drawing.Size(79, 26);
+            this.tbValuer.TabIndex = 45;
+            this.tbValuer.Text = "r";
+            this.tbValuer.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // cbMetrik
+            // 
+            this.cbMetrik.AutoCompleteCustomSource.AddRange(new string[] {
+            "da",
+            "asd",
+            "ad",
+            "asd"});
+            this.cbMetrik.FormattingEnabled = true;
+            this.cbMetrik.Items.AddRange(new object[] {
+            "Евклидово r",
+            "Квадрат евклидового r",
+            "r городских кварталов",
+            "r Чебешева",
+            "Степенное r"});
+            this.cbMetrik.Location = new System.Drawing.Point(1000, 102);
+            this.cbMetrik.Name = "cbMetrik";
+            this.cbMetrik.Size = new System.Drawing.Size(79, 21);
+            this.cbMetrik.TabIndex = 44;
             // 
             // Forel2Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1084, 641);
-            this.Controls.Add(this.panelGraph);
-            this.Controls.Add(this.btnDrawGraph);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.tbValuep);
+            this.Controls.Add(this.tbValuer);
+            this.Controls.Add(this.cbMetrik);
+            this.Controls.Add(this.btnNormalizationOfData);
+            this.Controls.Add(this.btnLoadDataset);
+            this.Controls.Add(this.numericUpDownMetrik);
+            this.Controls.Add(this.numericUpDownNumber);
             this.Controls.Add(this.dataGridViewClassTable);
-            this.Controls.Add(this.numericUpDownRadius);
             this.Controls.Add(this.btnToDo);
-            this.Controls.Add(this.btnTest);
-            this.Controls.Add(this.numericUpDownNumberOfDimensions);
-            this.Controls.Add(this.dataGridViewCoordinateMatrix);
-            this.Controls.Add(this.numericUpDownAmountOfPoints);
+            this.Controls.Add(this.dataGridViewMatrixDataset);
             this.Name = "Forel2Form";
             this.Text = "Forel2Form";
             this.Load += new System.EventHandler(this.Forel2Form_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClassTable)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRadius)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNumberOfDimensions)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCoordinateMatrix)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAmountOfPoints)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMatrixDataset)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMetrik)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNumber)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel panelGraph;
-        private System.Windows.Forms.Button btnDrawGraph;
         private System.Windows.Forms.DataGridView dataGridViewClassTable;
-        private System.Windows.Forms.NumericUpDown numericUpDownRadius;
         private System.Windows.Forms.Button btnToDo;
-        private System.Windows.Forms.Button btnTest;
-        private System.Windows.Forms.NumericUpDown numericUpDownNumberOfDimensions;
-        private System.Windows.Forms.DataGridView dataGridViewCoordinateMatrix;
-        private System.Windows.Forms.NumericUpDown numericUpDownAmountOfPoints;
+        private System.Windows.Forms.DataGridView dataGridViewMatrixDataset;
+        private System.Windows.Forms.NumericUpDown numericUpDownMetrik;
+        private System.Windows.Forms.NumericUpDown numericUpDownNumber;
+        private System.Windows.Forms.Button btnNormalizationOfData;
+        private System.Windows.Forms.Button btnLoadDataset;
+        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.TextBox tbValuep;
+        private System.Windows.Forms.TextBox tbValuer;
+        private System.Windows.Forms.ComboBox cbMetrik;
     }
 }

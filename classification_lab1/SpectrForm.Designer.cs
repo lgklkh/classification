@@ -45,6 +45,10 @@
             this.zedGraph = new ZedGraph.ZedGraphControl();
             this.numericUpDownCount = new System.Windows.Forms.NumericUpDown();
             this.btnNormalizationOfData = new System.Windows.Forms.Button();
+            this.cbMetrik = new System.Windows.Forms.ComboBox();
+            this.tbValuer = new System.Windows.Forms.TextBox();
+            this.tbValuep = new System.Windows.Forms.TextBox();
+            this.btnCancel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMatrixOfDistances)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSpectrumOfBonds)).BeginInit();
@@ -115,7 +119,7 @@
             this.dataGridViewSpectrumOfBonds.RowHeadersVisible = false;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.dataGridViewSpectrumOfBonds.RowsDefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridViewSpectrumOfBonds.Size = new System.Drawing.Size(554, 90);
+            this.dataGridViewSpectrumOfBonds.Size = new System.Drawing.Size(554, 122);
             this.dataGridViewSpectrumOfBonds.TabIndex = 4;
             // 
             // btnDrawGraph
@@ -266,11 +270,60 @@
             this.btnNormalizationOfData.UseVisualStyleBackColor = true;
             this.btnNormalizationOfData.Click += new System.EventHandler(this.btnNormalizationOfData_Click);
             // 
+            // cbMetrik
+            // 
+            this.cbMetrik.AutoCompleteCustomSource.AddRange(new string[] {
+            "da",
+            "asd",
+            "ad",
+            "asd"});
+            this.cbMetrik.FormattingEnabled = true;
+            this.cbMetrik.Items.AddRange(new object[] {
+            "Евклидово r",
+            "Квадрат евклидового r",
+            "r городских кварталов",
+            "r Чебешева",
+            "Степенное r"});
+            this.cbMetrik.Location = new System.Drawing.Point(963, 262);
+            this.cbMetrik.Name = "cbMetrik";
+            this.cbMetrik.Size = new System.Drawing.Size(90, 21);
+            this.cbMetrik.TabIndex = 40;
+            // 
+            // tbValuer
+            // 
+            this.tbValuer.Location = new System.Drawing.Point(1155, 250);
+            this.tbValuer.Name = "tbValuer";
+            this.tbValuer.Size = new System.Drawing.Size(89, 20);
+            this.tbValuer.TabIndex = 41;
+            this.tbValuer.Text = "r";
+            // 
+            // tbValuep
+            // 
+            this.tbValuep.Location = new System.Drawing.Point(1155, 272);
+            this.tbValuep.Name = "tbValuep";
+            this.tbValuep.Size = new System.Drawing.Size(89, 20);
+            this.tbValuep.TabIndex = 42;
+            this.tbValuep.Text = "p";
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(1282, 192);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(51, 39);
+            this.btnCancel.TabIndex = 43;
+            this.btnCancel.Text = "X";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
             // SpectrForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1384, 761);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.tbValuep);
+            this.Controls.Add(this.tbValuer);
+            this.Controls.Add(this.cbMetrik);
             this.Controls.Add(this.btnNormalizationOfData);
             this.Controls.Add(this.numericUpDownCount);
             this.Controls.Add(this.zedGraph);
@@ -299,6 +352,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMetrik)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCount)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -316,5 +370,9 @@
         private ZedGraph.ZedGraphControl zedGraph;
         private System.Windows.Forms.NumericUpDown numericUpDownCount;
         private System.Windows.Forms.Button btnNormalizationOfData;
+        private System.Windows.Forms.ComboBox cbMetrik;
+        private System.Windows.Forms.TextBox tbValuer;
+        private System.Windows.Forms.TextBox tbValuep;
+        private System.Windows.Forms.Button btnCancel;
     }
 }

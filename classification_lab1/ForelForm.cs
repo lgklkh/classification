@@ -13,10 +13,10 @@ namespace classification_lab1
 {
     public partial class ForelForm : Form
     {
-        double[,] testMatrix;
-        nPoint centerPoint;
-        double radius;
-        double dRadius = 0.9;
+        int number;
+        int metrik;
+
+        double[][] testDataset;
 
         public ForelForm()
         {
@@ -25,297 +25,307 @@ namespace classification_lab1
 
         private void ForelForm_Load(object sender, EventArgs e)
         {
-            numericUpDownNumberOfMetrik.Value = 2;
-            numericUpDownAmountOfPoints.Value = 5;
+            numericUpDownMetrik.Value = 2;
+            numericUpDownNumber.Value = 5;
         }
 
         private void numericUpDownAmountOfPoints_ValueChanged(object sender, EventArgs e)
         {
-            int numberOfnPoints = Convert.ToInt32(numericUpDownAmountOfPoints.Value);
-            int numberOfDimensions = Convert.ToInt32(numericUpDownNumberOfMetrik.Value);
+            number = Convert.ToInt32(numericUpDownNumber.Value);
+            metrik = Convert.ToInt32(numericUpDownMetrik.Value) - 1;
 
             // create CoordinateMatrix table
             DataTable dt = new DataTable();
 
-            for (int i = 0; i <= numberOfDimensions; i++)
+            for (int i = 0; i <= metrik; i++)
             {
                 dt.Columns.Add(i.ToString());
             }
 
-            for (int i = 0; i <= numberOfnPoints; i++)
+            for (int i = 0; i <= number; i++)
             {
                 dt.Rows.Add();
             }
 
-            dataGridViewCoordinateMatrix.DataSource = dt;
+            dataGridViewMatrixDataset.DataSource = dt;
 
-            for (int i = 0; i <= numberOfDimensions; i++)
+            for (int i = 0; i <= metrik; i++)
             {
-                dataGridViewCoordinateMatrix[i, 0].Value = "S" + i;
-                dataGridViewCoordinateMatrix.Columns[i].Width = 40;
+                dataGridViewMatrixDataset[i, 0].Value = "S" + i;
+                dataGridViewMatrixDataset.Columns[i].Width = 40;
             }
 
-            for (int i = 0; i <= numberOfnPoints; i++)
+            for (int i = 0; i <= number; i++)
             {
-                dataGridViewCoordinateMatrix[0, i].Value = "M" + i;
-                dataGridViewCoordinateMatrix.Rows[i].Height = 25;
+                dataGridViewMatrixDataset[0, i].Value = "M" + i;
+                dataGridViewMatrixDataset.Rows[i].Height = 25;
             }
 
-            dataGridViewCoordinateMatrix[0, 0].Value = "№";
+            dataGridViewMatrixDataset[0, 0].Value = "№";
 
-            dataGridViewCoordinateMatrix.Height = 553;// (numberOfnPoints + 1) * 25 + 3;
-            dataGridViewCoordinateMatrix.Width = (numberOfDimensions + 1) * 40 + 3;
-            dataGridViewCoordinateMatrix.Rows[0].DefaultCellStyle.BackColor =
-                dataGridViewCoordinateMatrix.Columns[0].DefaultCellStyle.BackColor = Color.LightGray;
+            dataGridViewMatrixDataset.Rows[0].DefaultCellStyle.BackColor =
+                dataGridViewMatrixDataset.Columns[0].DefaultCellStyle.BackColor = Color.LightGray;
 
             // create Classes table
             dt = new DataTable();
 
-            dt.Columns.Add(1.ToString()); dt.Columns.Add(2.ToString()); dt.Columns.Add(3.ToString()); dt.Columns.Add(4.ToString());
+            dt.Columns.Add(1.ToString()); dt.Columns.Add(2.ToString()); dt.Columns.Add(3.ToString());
 
-            for (int i = 0; i <= numberOfnPoints; i++)
+            for (int i = 0; i <= number; i++)
             {
                 dt.Rows.Add();
             }
 
             dataGridViewClassTable.DataSource = dt;
 
-            dataGridViewClassTable[1, 0].Value = "C(i)";
-            dataGridViewClassTable[2, 0].Value = "{,,,}";
-            dataGridViewClassTable[3, 0].Value = "R";
-            for (int i = 0; i <= numberOfnPoints; i++)
+            for (int i = 0; i <= number; i++)
             {
-                dataGridViewClassTable[0, i].Value = i + " ";
+                dataGridViewClassTable[0, i].Value = "Class " + i;
                 dataGridViewClassTable.Rows[i].Height = 25;
             }
-            dataGridViewClassTable[0, 0].Value = "";
+            dataGridViewClassTable[0, 0].Value = "T/F";
+            dataGridViewClassTable[1, 0].Value = "Class";
+            dataGridViewClassTable[2, 0].Value = "№";
+
             dataGridViewClassTable.Columns[0].Width = 60;
-            dataGridViewClassTable.Columns[1].Width = 90;
-            dataGridViewClassTable.Columns[2].Width = 200;
-            dataGridViewClassTable.Columns[3].Width = 60;
-            dataGridViewClassTable.Width = 410 + 3;
-            dataGridViewClassTable.Height = 50;
+            dataGridViewClassTable.Columns[1].Width = 60;
+            dataGridViewClassTable.Columns[2].Width = 60;
             dataGridViewClassTable.Rows[0].DefaultCellStyle.BackColor =
                 dataGridViewClassTable.Columns[0].DefaultCellStyle.BackColor = Color.LightGray;
-            dataGridViewClassTable.Location =
-                new Point(dataGridViewCoordinateMatrix.Location.X + dataGridViewCoordinateMatrix.Width + 30,
-                dataGridViewCoordinateMatrix.Location.Y);
         }
-
-        private void btnTest_Click(object sender, EventArgs e)
-        {
-            --numericUpDownAmountOfPoints.Value;
-            ++numericUpDownAmountOfPoints.Value;
-
-            if (checkBoxTestData.Checked == false)
-            {
-                testMatrix = new double[Convert.ToInt32(numericUpDownNumberOfMetrik.Value),
-                Convert.ToInt32(numericUpDownAmountOfPoints.Value)];
-
-                Random random = new Random();
-                for (int i = 0; i < numericUpDownNumberOfMetrik.Value; i++)
-                {
-                    for (int j = 0; j < numericUpDownAmountOfPoints.Value; j++)
-                    {
-                        testMatrix[i, j] = random.Next(100);
-                    }
-                }
-
-                for (int i = 0; i < numericUpDownNumberOfMetrik.Value; i++)
-                {
-                    for (int j = 0; j < numericUpDownAmountOfPoints.Value; j++)
-                    {
-                        dataGridViewCoordinateMatrix[i + 1, j + 1].Value = testMatrix[i, j];
-                    }
-                }
-            }
-            else
-            {
-                var data = File.ReadAllLines("iris.txt");
-
-                int pointCount = data.Length;
-                int metrikCount = data[0].Split(',').Length - 1;
-                numericUpDownAmountOfPoints.Value = pointCount;
-                numericUpDownNumberOfMetrik.Value = metrikCount;
-
-                testMatrix = new double[metrikCount , pointCount];
-
-                for (int i = 0; i < metrikCount; i++)
-                {
-                    for (int j = 0; j < pointCount; j++)
-                    {
-                        testMatrix[i, j] = Convert.ToDouble(data[j].Split(',')[i]);
-                    }
-                }
-
-                for (int i = 0; i < metrikCount; i++)
-                {
-                    for (int j = 0; j < pointCount; j++)
-                    {
-                        dataGridViewCoordinateMatrix[i + 1, j + 1].Value = testMatrix[i, j];
-                    }
-                }
-            }
-        }
-
+        
         private void btnToDo_Click(object sender, EventArgs e)
         {
-            List<nPoint> bufferAll = new List<nPoint>();
-            int metrikCount = (int) numericUpDownNumberOfMetrik.Value;
-            for (int i = 0; i < numericUpDownAmountOfPoints.Value; i++)
+            int numClusters = (int) numericUpDownCount.Value;
+
+            int[] clustering = Cluster(testDataset, numClusters); // this is it
+
+            for(int i = 0; i < clustering.Length; i++)
             {
-                var point = new nPoint("M" + (i + 1), metrikCount);
-                for(int j = 0; j < metrikCount; j++)
-                {
-                    point.Metrik[j] = testMatrix[j, i];
-                }
-                bufferAll.Add(point);
-            }
-            centerPoint = new nPoint("C", metrikCount);
-            var maxRadius = Taxon.MaxRadius(bufferAll, centerPoint);
-
-            List<Taxon> outTaxons = new List<Taxon>();
-            for (int i = 1; bufferAll.Count != 0; i++)
-            {
-                // step 1
-                List<nPoint> bufferInternal = new List<nPoint>();
-                //
-                centerPoint = Taxon.GetCenter(bufferAll);
-
-                List<Taxon> bufferTaxons = new List<Taxon>();
-
-                radius = Taxon.MaxRadius(bufferAll, centerPoint);
-                // poisk min
-                for (int m = 0; m < bufferAll.Count; m++)
-                {
-                  //  radius = maxRadius;//Taxon.MaxRadius(bufferAll, centerPoint);
-
-                    // step 2
-                    while (true)
-                    {
-                        bufferInternal = new List<nPoint>();
-
-                        radius *= dRadius;
-
-                        for (int j = 0; j < bufferAll.Count; j++)
-                        {
-                            var point = bufferAll.ElementAt(j);
-                            if (Taxon.Length(point, bufferAll.ElementAt(m)) <= radius)
-                            {
-                                bufferInternal.Add(point);
-                            }
-                        }
-
-                        // step 3
-                        var centerGravity = new nPoint("C" + (i + 1), metrikCount);
-                        for (int j = 0; j < numericUpDownNumberOfMetrik.Value; j++)
-                        {
-                            centerGravity.Metrik[j] = bufferInternal.Average(x => x.Metrik[j]);
-                        }
-
-
-                        //// step 5
-                        //if (bufferInternal.Count == 2)
-                        //{
-                        //    centerPoint.Assign(centerGravity);
-                        //    break;
-                        //}
-                        if (centerGravity == centerPoint)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            centerPoint.Assign(centerGravity);
-                        }
-                    }
-                    Taxon taxon = new Taxon(radius, centerPoint, bufferInternal);
-                    bufferTaxons.Add(taxon);
-                }
-
-                // choise best taxon with min(P)
-                //if(bufferTaxons.Count > 1)
-                //    bufferTaxons.RemoveAll(x => x.Sum() == 0);
-                var bestTaxon = bufferTaxons.First(x => x.Sum() == bufferTaxons.Min(l => l.Sum()));
-                outTaxons.Add(bestTaxon);
-                bufferInternal = bestTaxon.Points;
-                bufferAll.RemoveAll(item => bufferInternal.Contains(item));
-
-                // add data to table
-                dataGridViewClassTable[0, i].Value = i + " F=" + bestTaxon.Sum();
-                dataGridViewClassTable[1, i].Value = string.Format("C{0}({1})", i, bestTaxon.GetCenterString());
-                dataGridViewClassTable[2, i].Value = string.Join(" ", bestTaxon.Points.Select(x => x.Name));
-                dataGridViewClassTable[3, i].Value = Math.Round(bestTaxon.Radius, 2);
-                dataGridViewClassTable.Height = 553;// (i + 1) * 25;
+                dataGridViewClassTable[0, i + 1].Value = (i != 0 && i != clustering.Length - 1 
+                    && clustering[i + 1] != clustering[i] 
+                    && clustering[i - 1] != clustering[i]) ? "#" : "";
+                dataGridViewClassTable[1, i + 1].Value = clustering[i];
+                dataGridViewClassTable[2, i + 1].Value = i + 1;
             }
         }
 
-        private void btnDrawGraph_Click(object sender, EventArgs e)
+        private void btnLoadDataset_Click(object sender, EventArgs e)
         {
-            Graphics gpanel = Graphics.FromHwnd(panelGraph.Handle);
-            gpanel.Clear(SystemColors.Control);
+            var data = File.ReadAllLines("iris.csv");
 
-            if (numericUpDownNumberOfMetrik.Value == 3)
-                return;
+            numericUpDownNumber.Value = data.Length;
+            numericUpDownMetrik.Value = data[0].Split(',').Length;
 
-            var startSys = new { x = panelGraph.Width / 12, y = panelGraph.Height / 12 };
-            int k = 4;
-
-            // draw coordinate grid
-            gpanel.DrawString("X", new Font("Arial", 20),
-                    new SolidBrush(Color.Black), 11 * startSys.x - 20, 11 * startSys.y);
-            gpanel.DrawString("Y", new Font("Arial", 20),
-                new SolidBrush(Color.Black), startSys.x - 30, startSys.y);
-            gpanel.DrawLine(new Pen(Color.Black, 3), startSys.x, startSys.y,
-                startSys.x, 11 * startSys.y);
-            gpanel.DrawLine(new Pen(Color.Black, 3), startSys.x, 11 * startSys.y,
-                11 * startSys.x, 11 * startSys.y);
-            for (int i = 1; i < 10; i++)
+            testDataset = new double[number][];
+            for (int i = 0; i < number; i++)
             {
-                gpanel.DrawLine(new Pen(Color.Black, 2), startSys.x - 5, (i + 1) * startSys.y,
-                    startSys.x + 5, (i + 1) * startSys.y);
-                gpanel.DrawString((10 * (10 - i)).ToString(), new Font("Arial", 10),
-                    new SolidBrush(Color.Black), startSys.x - 22, (i + 1) * startSys.y - 10);
+                double[] arrayMetrik = new double[metrik];
+                for (int j = 0; j < metrik; j++)
+                {
+                    arrayMetrik[j] = Convert.ToDouble(data[i].Split(',')[j + 1]);
+                    dataGridViewMatrixDataset[j + 1, i + 1].Value = Convert.ToDouble(data[i].Split(',')[j + 1]);
+                }
+                testDataset[i] = arrayMetrik;
+            }
+        }
 
-                gpanel.DrawLine(new Pen(Color.Black, 2), (i + 1) * startSys.x, 11 * startSys.y - 5,
-                    (i + 1) * startSys.x, 11 * startSys.y + 5);
-                gpanel.DrawString((i * 10).ToString(), new Font("Arial", 10),
-                    new SolidBrush(Color.Black), (i + 1) * startSys.x - 10, 11 * startSys.y + 5);
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            numericUpDownNumber.Value = numericUpDownMetrik.Value = 2;
+
+        }
+
+        public int[] Cluster(double[][] rawData, int numClusters)
+        {
+            double[][] data = Normalized(rawData); 
+
+            bool changed = true; 
+            bool success = true; 
+
+            int[] clustering = InitClustering(data.Length, numClusters, 0);
+            double[][] means = Allocate(numClusters, data[0].Length); 
+
+            int maxCount = data.Length * 10; 
+            int ct = 0;
+            while (changed == true && success == true && ct < maxCount)
+            {
+                ++ct;
+                success = UpdateMeans(data, clustering, means);
+                changed = UpdateClustering(data, clustering, means);
+            }
+            return clustering;
+        }
+
+        private double[][] Normalized(double[][] rawData)
+        {
+            double[][] result = new double[rawData.Length][];
+            for (int i = 0; i < rawData.Length; ++i)
+            {
+                result[i] = new double[rawData[i].Length];
+                Array.Copy(rawData[i], result[i], rawData[i].Length);
             }
 
-            // draw graph
-            int num = Convert.ToInt32(numericUpDownAmountOfPoints.Value);
-            for (int i = 1; i <= num; i++)
+            for (int j = 0; j < result[0].Length; ++j) // each col
             {
-                string name = dataGridViewCoordinateMatrix[0, i].Value.ToString();
-                PointF dot = new PointF(Convert.ToSingle(dataGridViewCoordinateMatrix[1, i].Value),
-                    Convert.ToSingle(dataGridViewCoordinateMatrix[2, i].Value));
-                gpanel.FillEllipse(Brushes.Blue, startSys.x + (k * dot.X) - 5,
-                    11 * startSys.y - (k * dot.Y) - 5, 10, 10);
-                gpanel.DrawString(name, new Font("Arial", 10),
-                    new SolidBrush(Color.Black), startSys.x + (k * dot.X),
-                    11 * startSys.y - (k * dot.Y) - 15);
+                double colSum = 0.0;
+                for (int i = 0; i < result.Length; ++i)
+                    colSum += result[i][j];
+                double mean = colSum / result.Length;
+                double sum = 0.0;
+                for (int i = 0; i < result.Length; ++i)
+                    sum += (result[i][j] - mean) * (result[i][j] - mean);
+                double sd = sum / result.Length;
+                for (int i = 0; i < result.Length; ++i)
+                    result[i][j] = (result[i][j] - mean) / sd;
+            }
+            return result;
+        }
+
+        private int[] InitClustering(int numTuples, int numClusters, int randomSeed)
+        {
+            Random random = new Random(randomSeed);
+            int[] clustering = new int[numTuples];
+            for (int i = 0; i < numClusters; ++i) 
+                clustering[i] = i;
+            for (int i = numClusters; i < clustering.Length; ++i)
+                clustering[i] = random.Next(0, numClusters);
+            return clustering;
+        }
+
+        private double[][] Allocate(int numClusters, int numColumns)
+        {
+            double[][] result = new double[numClusters][];
+            for (int k = 0; k < numClusters; ++k)
+                result[k] = new double[numColumns];
+            return result;
+        }
+
+        private bool UpdateMeans(double[][] data, int[] clustering, double[][] means)
+        {
+            int numClusters = means.Length;
+            int[] clusterCounts = new int[numClusters];
+            for (int i = 0; i < data.Length; ++i)
+            {
+                int cluster = clustering[i];
+                ++clusterCounts[cluster];
             }
 
-            for (int i = 1; dataGridViewClassTable[1, i].Value.ToString() != ""; i++)
+            for (int k = 0; k < numClusters; ++k)
+                if (clusterCounts[k] == 0)
+                    return false; 
+ 
+            for (int k = 0; k < means.Length; ++k)
+                for (int j = 0; j < means[k].Length; ++j)
+                    means[k][j] = 0.0;
+
+            for (int i = 0; i < data.Length; ++i)
             {
-                string name = "C" + i;
-                var centerXY = dataGridViewClassTable[1, i].Value.ToString().Replace(name, "").
-                    Replace("(", "").Replace(")", "").Split(';');
-                PointF dot = new PointF(Convert.ToSingle(centerXY[0]),
-                    Convert.ToSingle(centerXY[1]));
-                gpanel.FillEllipse(Brushes.Red, startSys.x + (k * dot.X) - 3,
-                    11 * startSys.y - (k * dot.Y) - 3, 6, 6);
-                gpanel.DrawString(name, new Font("Arial", 10),
-                    new SolidBrush(Color.Red), startSys.x + (k * dot.X),
-                    11 * startSys.y - (k * dot.Y) + 3);
-                float localRadius = k * Convert.ToSingle(dataGridViewClassTable[3, i].Value);
-                gpanel.DrawEllipse(new Pen(Color.Red, 2),
-                    startSys.x + (k * dot.X) - localRadius,
-                    11 * startSys.y - (k * dot.Y) - localRadius,
-                    2 * localRadius,
-                    2 * localRadius);
+                int cluster = clustering[i];
+                for (int j = 0; j < data[i].Length; ++j)
+                    means[cluster][j] += data[i][j]; 
             }
+
+            for (int k = 0; k < means.Length; ++k)
+                for (int j = 0; j < means[k].Length; ++j)
+                    means[k][j] /= clusterCounts[k]; 
+            return true;
+        }
+
+        private bool UpdateClustering(double[][] data, int[] clustering, double[][] means)
+        {
+            int numClusters = means.Length;
+            bool changed = false;
+
+            int[] newClustering = new int[clustering.Length]; 
+            Array.Copy(clustering, newClustering, clustering.Length);
+
+            double[] distances = new double[numClusters]; 
+
+            for (int i = 0; i < data.Length; ++i) 
+            {
+                for (int k = 0; k < numClusters; ++k)
+                    distances[k] = GetLength(data[i], means[k]); 
+
+                int newClusterID = MinIndex(distances);
+                if (newClusterID != newClustering[i])
+                {
+                    changed = true;
+                    newClustering[i] = newClusterID; 
+                }
+            }
+
+            if (changed == false)
+                return false;
+
+            int[] clusterCounts = new int[numClusters];
+            for (int i = 0; i < data.Length; ++i)
+            {
+                int cluster = newClustering[i];
+                ++clusterCounts[cluster];
+            }
+
+            for (int k = 0; k < numClusters; ++k)
+                if (clusterCounts[k] == 0)
+                    return false; 
+
+            Array.Copy(newClustering, clustering, newClustering.Length); 
+            return true; 
+        }
+
+        private double GetLength(double[] firstPoint, double[] lastPoint)
+        {
+            double result = 0;
+
+            switch (cbMetrik.SelectedIndex)
+            {
+                case 0:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        result += Math.Pow(firstPoint[i] - lastPoint[i], 2);
+                    }
+                    return Math.Sqrt(result);
+                case 1:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        result += Math.Pow(firstPoint[i] - lastPoint[i], 2);
+                    }
+                    return result;
+                case 2:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        result += Math.Abs(firstPoint[i] - lastPoint[i]);
+                    }
+                    return result;
+                case 3:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        if (Math.Abs(firstPoint[i] - lastPoint[i]) > result)
+                            result = Math.Abs(firstPoint[i] - lastPoint[i]);
+                    }
+                    return result;
+                default:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        result += Math.Pow(Math.Abs(firstPoint[i] - lastPoint[i]), Convert.ToInt32(tbValuep.Text));
+                    }
+                    return Math.Pow(result, 1.0 / Convert.ToInt32(tbValuer.Text));
+            }
+        }
+
+        private int MinIndex(double[] distances)
+        {
+            int indexOfMin = 0;
+            double smallDist = distances[0];
+            for (int k = 0; k < distances.Length; ++k)
+            {
+                if (distances[k] < smallDist)
+                {
+                    smallDist = distances[k];
+                    indexOfMin = k;
+                }
+            }
+            return indexOfMin;
         }
     }
 }

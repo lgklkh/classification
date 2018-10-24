@@ -41,6 +41,10 @@
             this.btnGetMatrixOfDistances = new System.Windows.Forms.Button();
             this.btnLoadDataset = new System.Windows.Forms.Button();
             this.btnNormalizationOfData = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.tbValuep = new System.Windows.Forms.TextBox();
+            this.tbValuer = new System.Windows.Forms.TextBox();
+            this.cbMetrik = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBHRbuffer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMatrixDataset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMatrixOfDistances)).BeginInit();
@@ -84,7 +88,7 @@
             this.dataGridViewBHRbuffer.RowHeadersVisible = false;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.dataGridViewBHRbuffer.RowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridViewBHRbuffer.Size = new System.Drawing.Size(822, 106);
+            this.dataGridViewBHRbuffer.Size = new System.Drawing.Size(722, 130);
             this.dataGridViewBHRbuffer.TabIndex = 11;
             // 
             // dataGridViewMatrixDataset
@@ -210,11 +214,64 @@
             this.btnNormalizationOfData.UseVisualStyleBackColor = true;
             this.btnNormalizationOfData.Click += new System.EventHandler(this.btnNormalizationOfData_Click);
             // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(774, 512);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(51, 39);
+            this.btnCancel.TabIndex = 47;
+            this.btnCancel.Text = "X";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // tbValuep
+            // 
+            this.tbValuep.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbValuep.Location = new System.Drawing.Point(778, 480);
+            this.tbValuep.Name = "tbValuep";
+            this.tbValuep.Size = new System.Drawing.Size(46, 26);
+            this.tbValuep.TabIndex = 46;
+            this.tbValuep.Text = "p";
+            this.tbValuep.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // tbValuer
+            // 
+            this.tbValuer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbValuer.Location = new System.Drawing.Point(778, 454);
+            this.tbValuer.Name = "tbValuer";
+            this.tbValuer.Size = new System.Drawing.Size(47, 26);
+            this.tbValuer.TabIndex = 45;
+            this.tbValuer.Text = "r";
+            this.tbValuer.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // cbMetrik
+            // 
+            this.cbMetrik.AutoCompleteCustomSource.AddRange(new string[] {
+            "da",
+            "asd",
+            "ad",
+            "asd"});
+            this.cbMetrik.FormattingEnabled = true;
+            this.cbMetrik.Items.AddRange(new object[] {
+            "Евклидово r",
+            "Квадрат евклидового r",
+            "r городских кварталов",
+            "r Чебешева",
+            "Степенное r"});
+            this.cbMetrik.Location = new System.Drawing.Point(735, 427);
+            this.cbMetrik.Name = "cbMetrik";
+            this.cbMetrik.Size = new System.Drawing.Size(90, 21);
+            this.cbMetrik.TabIndex = 44;
+            // 
             // PrimaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(837, 536);
+            this.ClientSize = new System.Drawing.Size(837, 561);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.tbValuep);
+            this.Controls.Add(this.tbValuer);
+            this.Controls.Add(this.cbMetrik);
             this.Controls.Add(this.btnNormalizationOfData);
             this.Controls.Add(this.btnGetMatrixOfDistances);
             this.Controls.Add(this.btnLoadDataset);
@@ -225,8 +282,8 @@
             this.Controls.Add(this.btnToDo);
             this.Controls.Add(this.btnTest);
             this.Controls.Add(this.dataGridViewBHRbuffer);
-            this.MaximumSize = new System.Drawing.Size(853, 575);
-            this.MinimumSize = new System.Drawing.Size(853, 575);
+            this.MaximumSize = new System.Drawing.Size(853, 600);
+            this.MinimumSize = new System.Drawing.Size(853, 600);
             this.Name = "PrimaForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PrimaForm";
@@ -237,6 +294,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMetrik)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNumber)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -251,5 +309,9 @@
         private System.Windows.Forms.Button btnGetMatrixOfDistances;
         private System.Windows.Forms.Button btnLoadDataset;
         private System.Windows.Forms.Button btnNormalizationOfData;
+        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.TextBox tbValuep;
+        private System.Windows.Forms.TextBox tbValuer;
+        private System.Windows.Forms.ComboBox cbMetrik;
     }
 }

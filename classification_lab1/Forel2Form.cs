@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +13,13 @@ namespace classification_lab1
 {
     public partial class Forel2Form : Form
     {
-        double[,] testMatrix;
-        nPoint centerPoint;
+        int number;
+        int metrik;
+
+        double[,] testDataset;
+        int[] classDataset;
+
+        double[] centerPoint;
         double radius;
 
         public Forel2Form()
@@ -23,55 +29,53 @@ namespace classification_lab1
 
         private void Forel2Form_Load(object sender, EventArgs e)
         {
-            numericUpDownNumberOfDimensions.Value = 2;
-            numericUpDownAmountOfPoints.Value = 5;
+            numericUpDownMetrik.Value = 2;
+            numericUpDownNumber.Value = 5;
         }
 
         private void numericUpDownAmountOfPoints_ValueChanged(object sender, EventArgs e)
         {
-            int numberOfnPoints = Convert.ToInt32(numericUpDownAmountOfPoints.Value);
-            int numberOfDimensions = Convert.ToInt32(numericUpDownNumberOfDimensions.Value);
+            number = Convert.ToInt32(numericUpDownNumber.Value);
+            metrik = Convert.ToInt32(numericUpDownMetrik.Value) - 1;
 
             // create CoordinateMatrix table
             DataTable dt = new DataTable();
 
-            for (int i = 0; i <= numberOfDimensions; i++)
+            for (int i = 0; i <= metrik; i++)
             {
                 dt.Columns.Add(i.ToString());
             }
 
-            for (int i = 0; i <= numberOfnPoints; i++)
+            for (int i = 0; i <= number; i++)
             {
                 dt.Rows.Add();
             }
 
-            dataGridViewCoordinateMatrix.DataSource = dt;
+            dataGridViewMatrixDataset.DataSource = dt;
 
-            for (int i = 0; i <= numberOfDimensions; i++)
+            for (int i = 0; i <= metrik; i++)
             {
-                dataGridViewCoordinateMatrix[i, 0].Value = "S" + i;
-                dataGridViewCoordinateMatrix.Columns[i].Width = 40;
+                dataGridViewMatrixDataset[i, 0].Value = "S" + i;
+                dataGridViewMatrixDataset.Columns[i].Width = 40;
             }
 
-            for (int i = 0; i <= numberOfnPoints; i++)
+            for (int i = 0; i <= number; i++)
             {
-                dataGridViewCoordinateMatrix[0, i].Value = "M" + i;
-                dataGridViewCoordinateMatrix.Rows[i].Height = 25;
+                dataGridViewMatrixDataset[0, i].Value = "M" + i;
+                dataGridViewMatrixDataset.Rows[i].Height = 25;
             }
 
-            dataGridViewCoordinateMatrix[0, 0].Value = "№";
+            dataGridViewMatrixDataset[0, 0].Value = "№";
 
-            dataGridViewCoordinateMatrix.Height = (numberOfnPoints + 1) * 25 + 3;
-            dataGridViewCoordinateMatrix.Width = (numberOfDimensions + 1) * 40 + 3;
-            dataGridViewCoordinateMatrix.Rows[0].DefaultCellStyle.BackColor =
-                dataGridViewCoordinateMatrix.Columns[0].DefaultCellStyle.BackColor = Color.LightGray;
+            dataGridViewMatrixDataset.Rows[0].DefaultCellStyle.BackColor =
+                dataGridViewMatrixDataset.Columns[0].DefaultCellStyle.BackColor = Color.LightGray;
 
             // create Classes table
             dt = new DataTable();
 
             dt.Columns.Add(1.ToString()); dt.Columns.Add(2.ToString()); dt.Columns.Add(3.ToString()); dt.Columns.Add(4.ToString());
 
-            for (int i = 0; i <= numberOfnPoints; i++)
+            for (int i = 0; i <= number; i++)
             {
                 dt.Rows.Add();
             }
@@ -81,7 +85,7 @@ namespace classification_lab1
             dataGridViewClassTable[1, 0].Value = "C(i)";
             dataGridViewClassTable[2, 0].Value = "{,,,}";
             dataGridViewClassTable[3, 0].Value = "R";
-            for (int i = 0; i <= numberOfnPoints; i++)
+            for (int i = 0; i <= number; i++)
             {
                 dataGridViewClassTable[0, i].Value = "Class " + i;
                 dataGridViewClassTable.Rows[i].Height = 25;
@@ -89,75 +93,92 @@ namespace classification_lab1
             dataGridViewClassTable[0, 0].Value = "";
             dataGridViewClassTable.Columns[0].Width = 60;
             dataGridViewClassTable.Columns[1].Width = 90;
-            dataGridViewClassTable.Columns[2].Width = 200;
+            dataGridViewClassTable.Columns[2].Width = 500;
             dataGridViewClassTable.Columns[3].Width = 60;
-            dataGridViewClassTable.Width = 410 + 3;
-            dataGridViewClassTable.Height = 50;
             dataGridViewClassTable.Rows[0].DefaultCellStyle.BackColor =
                 dataGridViewClassTable.Columns[0].DefaultCellStyle.BackColor = Color.LightGray;
-            dataGridViewClassTable.Location =
-                new Point(dataGridViewCoordinateMatrix.Location.X + dataGridViewCoordinateMatrix.Width + 30,
-                dataGridViewCoordinateMatrix.Location.Y);
-        }
-
-        private void btnTest_Click(object sender, EventArgs e)
-        {
-            --numericUpDownAmountOfPoints.Value;
-            ++numericUpDownAmountOfPoints.Value;
-
-            testMatrix = new double[Convert.ToInt32(numericUpDownNumberOfDimensions.Value),
-                Convert.ToInt32(numericUpDownAmountOfPoints.Value)];
-
-            Random random = new Random();
-            for (int i = 0; i < numericUpDownNumberOfDimensions.Value; i++)
-            {
-                for (int j = 0; j < numericUpDownAmountOfPoints.Value; j++)
-                {
-                    testMatrix[i, j] = random.Next(100);
-                }
-            }
-
-            for (int i = 0; i < numericUpDownNumberOfDimensions.Value; i++)
-            {
-                for (int j = 0; j < numericUpDownAmountOfPoints.Value; j++)
-                {
-                    dataGridViewCoordinateMatrix[i + 1, j + 1].Value = testMatrix[i, j];
-                }
-            }
         }
 
         private struct nPoint
         {
-            public string name;
-            public double x;
-            public double y;
+            public int index;
+            public int classValue;
+            public double[] metrik;
+
+            public nPoint(int index, int[] classDataset, double[,] testDataset, int metrik)
+            {
+                this.index = index;
+                this.classValue = classDataset[index];
+                this.metrik = Enumerable.Range(0, metrik)
+                            .Select(k => testDataset[index, k])
+                            .ToArray();
+            }
         }
 
-        private double Length(nPoint x1, nPoint x2)
+        private double GetLength(double[] firstPoint, double[] lastPoint)
         {
-            return Math.Sqrt(Math.Pow((x1.x - x2.x), 2) + Math.Pow((x1.y - x2.y), 2));
+            double result = 0;
+
+            switch (cbMetrik.SelectedIndex)
+            {
+                case 0:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        result += Math.Pow(firstPoint[i] - lastPoint[i], 2);
+                    }
+                    return Math.Sqrt(result);
+                case 1:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        result += Math.Pow(firstPoint[i] - lastPoint[i], 2);
+                    }
+                    return result;
+                case 2:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        result += Math.Abs(firstPoint[i] - lastPoint[i]);
+                    }
+                    return result;
+                case 3:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        if (Math.Abs(firstPoint[i] - lastPoint[i]) > result)
+                            result = Math.Abs(firstPoint[i] - lastPoint[i]);
+                    }
+                    return result;
+                default:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        result += Math.Pow(Math.Abs(firstPoint[i] - lastPoint[i]), Convert.ToInt32(tbValuep.Text));
+                    }
+                    return Math.Pow(result, 1.0 / Convert.ToInt32(tbValuer.Text));
+            }
         }
 
-        private double MaxRadius(List<nPoint> nPoints, nPoint center)
+        private double MaxRadius(List<nPoint> nPoints, double[] center)
         {
            var maxValue = Enumerable.Range(0, nPoints.Count)
-                .Select(x => Length(nPoints.ElementAt(x), center))
+                .Select(x => GetLength(nPoints.ElementAt(x).metrik, center))
                 .ToArray().Max();
             return maxValue;
         }
 
         private void btnToDo_Click(object sender, EventArgs e)
         {
+            // clear result datagrid
+            for (int i = 1; i <= number; i++)
+            {
+                for (int j = 1; j <= 3; j++)
+                    dataGridViewClassTable[j, i].Value = "";
+            }
+            //
+
             List<nPoint> bufferAll = new List<nPoint>();
             List<nPoint> bufferInternal = new List<nPoint>();
-            for (int i = 0; i < numericUpDownAmountOfPoints.Value; i++)
+
+            for (int i = 0; i < number; i++)
             {
-                var point = new nPoint()
-                {
-                    name = "M" + (i + 1),
-                    x = testMatrix[0, i],
-                    y = testMatrix[1, i]
-                };
+                var point = new nPoint(i, classDataset, testDataset, metrik);
                 bufferAll.Add(point);
             }
 
@@ -166,117 +187,126 @@ namespace classification_lab1
             {
                 // step 1
                 bufferInternal.AddRange(bufferAll);
-                centerPoint.x = bufferAll.Average(x => x.x);
-                centerPoint.y = bufferAll.Average(x => x.y);
+
+                centerPoint = new double[metrik];
+                for(int j = 0; j < metrik; j++)
+                {
+                    centerPoint[j] = bufferAll.Average(x => x.metrik[j]);
+                }
 
                 radius = MaxRadius(bufferAll, centerPoint);
-
 
                 // step 2
                 while (true)
                 {
-                    radius *= 0.95;
+                    radius *= 0.9;
 
                     for (int j = 0; j < bufferInternal.Count; j++)
                     {
                         var point = bufferInternal.ElementAt(j);
-                        if (Length(point, bufferInternal.First()) > radius)
+                        if (GetLength(point.metrik, bufferInternal.First().metrik) > radius)
                         {
                             bufferInternal.Remove(point);
                         }
                     }
 
                     // step 3
-                    var centerGravity = new nPoint()
+                    var centerGravity = new double[metrik];
+                    for (int j = 0; j < metrik; j++)
                     {
-                        x = bufferInternal.Average(x => x.x),
-                        y = bufferInternal.Average(x => x.y)
-                    };
+                        centerGravity[j] = bufferInternal.Average(x => x.metrik[j]);
+                    }
 
                     // step 5
-                    if (centerGravity.x == centerPoint.x && centerGravity.y == centerPoint.y)
+                    if (Equil(centerGravity, centerPoint))
                     {
                         bufferAll.RemoveAll(item => bufferInternal.Contains(item));
                         break;
                     }
                     else
                     {
-                        centerPoint.x = centerGravity.x;
-                        centerPoint.y = centerGravity.y;
+                        for(int j = 0; j < metrik; j++)
+                        {
+                            centerPoint[j] = centerGravity[j];
+                        }
                     }
                 }
 
                 // step 6
-                dataGridViewClassTable[1, i].Value = string.Format("C{0}({1};{2})", i, Math.Round(centerPoint.x, 2), Math.Round(centerPoint.y, 2));
-                dataGridViewClassTable[2, i].Value = string.Join(" ", bufferInternal.Select(x => x.name));
+                dataGridViewClassTable[1, i].Value = string.Format("Class - " + bufferInternal.Average(x => x.classValue));
+                dataGridViewClassTable[2, i].Value = string.Join(" ", bufferInternal.Select(x => x.index + 1));
                 dataGridViewClassTable[3, i].Value = (bufferInternal.Count == 1) ? 0 : Math.Round(radius, 2);
-                dataGridViewClassTable.Height = (i + 1) * 25;
                 bufferInternal.RemoveRange(0, bufferInternal.Count);
             }
         }
 
-        private void btnDrawGraph_Click(object sender, EventArgs e)
+        public bool Equil(double[] firstPoint, double[] lastpoint)
         {
-            Graphics gpanel = Graphics.FromHwnd(panelGraph.Handle);
-            gpanel.Clear(SystemColors.Control);
-            var startSys = new { x = panelGraph.Width / 12, y = panelGraph.Height / 12 };
-            int k = 4;
-
-            // draw coordinate grid
-            gpanel.DrawString("X", new Font("Arial", 20),
-                    new SolidBrush(Color.Black), 11 * startSys.x - 20, 11 * startSys.y);
-            gpanel.DrawString("Y", new Font("Arial", 20),
-                new SolidBrush(Color.Black), startSys.x - 30, startSys.y);
-            gpanel.DrawLine(new Pen(Color.Black, 3), startSys.x, startSys.y,
-                startSys.x, 11 * startSys.y);
-            gpanel.DrawLine(new Pen(Color.Black, 3), startSys.x, 11 * startSys.y,
-                11 * startSys.x, 11 * startSys.y);
-            for (int i = 1; i < 10; i++)
+            bool result = true;
+            for(int i = 0; i < firstPoint.Length; i++)
             {
-                gpanel.DrawLine(new Pen(Color.Black, 2), startSys.x - 5, (i + 1) * startSys.y,
-                    startSys.x + 5, (i + 1) * startSys.y);
-                gpanel.DrawString((10 * (10 - i)).ToString(), new Font("Arial", 10),
-                    new SolidBrush(Color.Black), startSys.x - 22, (i + 1) * startSys.y - 10);
+                result &= firstPoint[i] == lastpoint[i];
+            }
+                    
+            return result;
+        }
 
-                gpanel.DrawLine(new Pen(Color.Black, 2), (i + 1) * startSys.x, 11 * startSys.y - 5,
-                    (i + 1) * startSys.x, 11 * startSys.y + 5);
-                gpanel.DrawString((i * 10).ToString(), new Font("Arial", 10),
-                    new SolidBrush(Color.Black), (i + 1) * startSys.x - 10, 11 * startSys.y + 5);
+        private void btnLoadDataset_Click(object sender, EventArgs e)
+        {
+            var data = File.ReadAllLines("iris.csv");
+
+            numericUpDownNumber.Value = data.Length;
+            numericUpDownMetrik.Value = data[0].Split(',').Length;
+
+            testDataset = new double[number, metrik];
+            classDataset = new int[number];
+
+            for (int i = 0; i < number; i++)
+            {
+                for (int j = 0; j < metrik; j++)
+                {
+                    testDataset[i, j] = Convert.ToDouble(data[i].Split(',')[j + 1]);
+                    classDataset[i] = Convert.ToInt32(data[i].Split(',')[0]);
+                    dataGridViewMatrixDataset[j + 1, i + 1].Value = testDataset[i, j];
+                }
+            }
+        }
+
+        private void btnNormalizationOfData_Click(object sender, EventArgs e)
+        {
+            List<double[]> minmaxvalues = new List<double[]>();
+
+            // find min and max values
+            for (int j = 0; j < metrik; j++)
+            {
+                double min = testDataset[0, j], max = testDataset[0, j];
+                for (int i = 0; i < number; i++)
+                {
+                    if (testDataset[i, j] < min)
+                        min = testDataset[i, j];
+                    if (testDataset[i, j] >= max)
+                        max = testDataset[i, j];
+                }
+                minmaxvalues.Add(new double[] { min, max });
             }
 
-            // draw graph
-            int num = Convert.ToInt32(numericUpDownAmountOfPoints.Value);
-            for (int i = 1; i <= num; i++)
+            // change values
+            for (int j = 0; j < metrik; j++)
             {
-                string name = dataGridViewCoordinateMatrix[0, i].Value.ToString();
-                PointF dot = new PointF(Convert.ToSingle(dataGridViewCoordinateMatrix[1, i].Value),
-                    Convert.ToSingle(dataGridViewCoordinateMatrix[2, i].Value));
-                gpanel.FillEllipse(Brushes.Blue, startSys.x + (k * dot.X) - 5,
-                    11 * startSys.y - (k * dot.Y) - 5, 10, 10);
-                gpanel.DrawString(name, new Font("Arial", 10),
-                    new SolidBrush(Color.Black), startSys.x + (k * dot.X),
-                    11 * startSys.y - (k * dot.Y) - 15);
+                var minmax = minmaxvalues.ElementAt(j);
+                for (int i = 0; i < number; i++)
+                {
+                    testDataset[i, j] -= minmax[0];
+                    testDataset[i, j] /= minmax[1] - minmax[0];
+                    dataGridViewMatrixDataset[j + 1, i + 1].Value = testDataset[i, j];
+                }
             }
+        }
 
-            for (int i = 1; dataGridViewClassTable[1, i].Value.ToString() != ""; i++)
-            {
-                string name = "C" + i;
-                var centerXY = dataGridViewClassTable[1, i].Value.ToString().Replace(name, "").
-                    Replace("(", "").Replace(")", "").Split(';');
-                PointF dot = new PointF(Convert.ToSingle(centerXY[0]),
-                    Convert.ToSingle(centerXY[1]));
-                gpanel.FillEllipse(Brushes.Red, startSys.x + (k * dot.X) - 3,
-                    11 * startSys.y - (k * dot.Y) - 3, 6, 6);
-                gpanel.DrawString(name, new Font("Arial", 10),
-                    new SolidBrush(Color.Red), startSys.x + (k * dot.X),
-                    11 * startSys.y - (k * dot.Y) + 3);
-                float localRadius = k * Convert.ToSingle(dataGridViewClassTable[3, i].Value);
-                gpanel.DrawEllipse(new Pen(Color.Red, 2),
-                    startSys.x + (k * dot.X) - localRadius,
-                    11 * startSys.y - (k * dot.Y) - localRadius,
-                    2 * localRadius,
-                    2 * localRadius);
-            }
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            numericUpDownNumber.Value = numericUpDownMetrik.Value = 2;
+
         }
     }
 }

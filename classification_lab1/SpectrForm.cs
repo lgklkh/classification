@@ -14,7 +14,11 @@ namespace classification_lab1
 {
     public partial class SpectrForm : Form
     {
+        int number;
+        int metrik;
+
         double[,] testDataset;
+        int[] classDataset;
         double[,] testMatrix;
 
         public SpectrForm()
@@ -32,7 +36,7 @@ namespace classification_lab1
 
         private void numericUpDownNumber_ValueChanged(object sender, EventArgs e)
         {
-            int number = Convert.ToInt32(numericUpDownNumber.Value);
+            number = Convert.ToInt32(numericUpDownNumber.Value);
             DataTable dt = new DataTable();
 
             for (int i = 0; i <= number; i++)
@@ -50,7 +54,7 @@ namespace classification_lab1
             {
                 dt.Columns.Add(i.ToString());
             }
-            dt.Rows.Add(); dt.Rows.Add(); dt.Rows.Add();
+            dt.Rows.Add(); dt.Rows.Add(); dt.Rows.Add(); dt.Rows.Add();
 
             dataGridViewSpectrumOfBonds.DataSource = dt;
 
@@ -70,6 +74,7 @@ namespace classification_lab1
                 dataGridViewSpectrumOfBonds[1, 1].Value = "1";
                 dataGridViewSpectrumOfBonds[0, 2].Value = "C(i)";
                 dataGridViewSpectrumOfBonds[1, 2].Value = "0";
+                dataGridViewSpectrumOfBonds[0, 3].Value = "#";
             }
 
             dataGridViewSpectrumOfBonds.DefaultCellStyle.BackColor = Color.White;
@@ -81,8 +86,8 @@ namespace classification_lab1
 
         private void numericUpDownMetrik_ValueChanged(object sender, EventArgs e)
         {
-            int number = Convert.ToInt32(numericUpDownNumber.Value);
-            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
+            number = Convert.ToInt32(numericUpDownNumber.Value);
+            metrik = Convert.ToInt32(numericUpDownMetrik.Value) - 1;
 
             DataTable dt = new DataTable();
 
@@ -125,7 +130,7 @@ namespace classification_lab1
             PointPairList list = new PointPairList();
             for (int i = 1; i <= numericUpDownNumber.Value; i++)
             {
-                list.Add(Convert.ToDouble(dataGridViewSpectrumOfBonds[i, 0].Value), Convert.ToDouble(dataGridViewSpectrumOfBonds[i, 2].Value));
+                list.Add(Convert.ToDouble(i), Convert.ToDouble(dataGridViewSpectrumOfBonds[i, 2].Value));
             }
 
             LineItem myCurve = pane.AddCurve("Спектр близкостей", list, Color.Blue, SymbolType.Star);
@@ -195,6 +200,8 @@ namespace classification_lab1
                 blockB.Add(xNext.index);
                 dataGridViewSpectrumOfBonds[blockB.Count, 1].Value = xNext.index;
                 dataGridViewSpectrumOfBonds[blockB.Count, 2].Value = xNext.distance;
+                if(classDataset != null)
+                    dataGridViewSpectrumOfBonds[blockB.Count, 3].Value = classDataset[xNext.index - 1];
                 xNext = new { index = 0, distance = 0.0 };
 
             }
@@ -224,21 +231,20 @@ namespace classification_lab1
 
         private void btnLoadDataset_Click(object sender, EventArgs e)
         {
-            var data = File.ReadAllLines("nba_pos.csv");
+            var data = File.ReadAllLines("iris.csv");
 
             numericUpDownNumber.Value = data.Length;
             numericUpDownMetrik.Value = data[0].Split(',').Length;
 
-            int number = Convert.ToInt32(numericUpDownNumber.Value);
-            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
-
             testDataset = new double[number, metrik];
+            classDataset = new int[number];
 
             for (int i = 0; i < number; i++)
             {
                 for(int j = 0; j < metrik; j++)
                 {
-                    testDataset[i, j] = Convert.ToDouble(data[i].Split(',')[j]);
+                    testDataset[i, j] = Convert.ToDouble(data[i].Split(',')[j + 1]);
+                    classDataset[i] = Convert.ToInt32(data[i].Split(',')[0]);
                     dataGridViewMatrixDataset[j + 1, i + 1].Value = testDataset[i, j];
                 }
             }
@@ -246,9 +252,6 @@ namespace classification_lab1
 
         private void btnGetMatrixOfDistances_Click(object sender, EventArgs e)
         {
-            int number = Convert.ToInt32(numericUpDownNumber.Value);
-            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
-
             testMatrix = new double[number, number];
 
             for(int i = 0; i < number; i++)
@@ -277,11 +280,40 @@ namespace classification_lab1
         {
             double result = 0;
 
-            for(int i = 0; i < firstPoint.Length; i++)
+            switch (cbMetrik.SelectedIndex)
             {
-                result += Math.Pow(firstPoint[i] - lastPoint[i], 2);
+                case 0:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        result += Math.Pow(firstPoint[i] - lastPoint[i], 2);
+                    }
+                    return 1.0 / Math.Sqrt(result);
+                case 1:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        result += Math.Pow(firstPoint[i] - lastPoint[i], 2);
+                    }
+                    return 1.0 / result;
+                case 2:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        result += Math.Abs(firstPoint[i] - lastPoint[i]);
+                    }
+                    return 1.0 / result;
+                case 3:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        if (Math.Abs(firstPoint[i] - lastPoint[i]) > result)
+                            result = Math.Abs(firstPoint[i] - lastPoint[i]);
+                    }
+                    return 1.0 / result;
+                default:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        result += Math.Pow(Math.Abs(firstPoint[i] - lastPoint[i]), Convert.ToInt32(tbValuep.Text));
+                    }
+                    return 1.0 / Math.Pow(result, 1.0 / Convert.ToInt32(tbValuer.Text));
             }
-            return 1.0 / Math.Sqrt(result);
         }
 
         private string zedGraph_PointValueEvent(ZedGraphControl sender, GraphPane pane, CurveItem curve, int iPt)
@@ -296,9 +328,6 @@ namespace classification_lab1
         private void btnNormalizationOfData_Click(object sender, EventArgs e)
         {
             List<double[]> minmaxvalues = new List<double[]>();
-
-            int number = Convert.ToInt32(numericUpDownNumber.Value);
-            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
 
             // find min and max values
             for (int j = 0; j < metrik; j++)
@@ -320,12 +349,16 @@ namespace classification_lab1
                 var minmax = minmaxvalues.ElementAt(j);
                 for (int i = 0; i < number; i++)
                 {
-                    //testDataset[i, j] = (testDataset[i, j] - minmax[0]) / (minmax[1] - minmax[0]);
                     testDataset[i, j] -= minmax[0];
                     testDataset[i, j] /= minmax[1] - minmax[0];
                     dataGridViewMatrixDataset[j + 1, i + 1].Value = testDataset[i, j];
                 }
             }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            numericUpDownNumber.Value = numericUpDownMetrik.Value = 2;
         }
     }
 }

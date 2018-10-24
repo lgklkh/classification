@@ -13,7 +13,11 @@ namespace classification_lab1
 {
     public partial class KrabForm : Form
     {
+        int number;
+        int metrik;
+
         double[,] testDataset;
+        int[] classDataset;
         double[,] testMatrix;
 
         public KrabForm()
@@ -28,7 +32,7 @@ namespace classification_lab1
 
         private void numericUpDownNumber_ValueChanged(object sender, EventArgs e)
         {
-            int number = Convert.ToInt32(numericUpDownNumber.Value);
+            number = Convert.ToInt32(numericUpDownNumber.Value);
             DataTable dt = new DataTable();
 
             for (int i = 0; i <= number; i++)
@@ -46,7 +50,7 @@ namespace classification_lab1
             {
                 dt.Columns.Add(i.ToString());
             }
-            dt.Rows.Add(); dt.Rows.Add(); dt.Rows.Add(); dt.Rows.Add();
+            dt.Rows.Add(); dt.Rows.Add(); dt.Rows.Add(); dt.Rows.Add(); dt.Rows.Add();
 
             dataGridViewBHRbuffer.DataSource = dt;
 
@@ -61,16 +65,18 @@ namespace classification_lab1
             }
 
             dataGridViewResult.DataSource = dt;
-          
-            dataGridViewResult[0, 0].Value = "i->j";
-            dataGridViewResult[0, 1].Value = "№";
-            dataGridViewResult[0, 2].Value = "R(i,j)";
-            dataGridViewResult[0, 3].Value = "D";
-            dataGridViewResult[0, 4].Value = "H";
-            dataGridViewResult[0, 5].Value = "R";
-            dataGridViewResult[0, 6].Value = "G";
-            dataGridViewResult[0, 7].Value = "L";
 
+            if (dataGridViewResult.Rows.Count > 7)
+            {
+                dataGridViewResult[0, 0].Value = "i->j";
+                dataGridViewResult[0, 1].Value = "i";
+                dataGridViewResult[0, 2].Value = "R(i,j)";
+                dataGridViewResult[0, 3].Value = "D";
+                dataGridViewResult[0, 4].Value = "H";
+                dataGridViewResult[0, 5].Value = "R";
+                dataGridViewResult[0, 6].Value = "G";
+                dataGridViewResult[0, 7].Value = "L";
+            }
             for (int i = 0; i <= number; i++)
             {
                 dataGridViewMatrixOfDistances[0, 0].Value = "№";
@@ -82,10 +88,11 @@ namespace classification_lab1
                     dataGridViewMatrixOfDistances.Rows[i].Height =
                     dataGridViewBHRbuffer.Columns[i].Width = 30;
                 dataGridViewResult.Columns[i].Width = 50;
-                dataGridViewBHRbuffer[0, 0].Value = "№";
+                dataGridViewBHRbuffer[0, 0].Value = "i";
                 dataGridViewBHRbuffer[0, 1].Value = "B(i)";
                 dataGridViewBHRbuffer[0, 2].Value = "H(i)";
                 dataGridViewBHRbuffer[0, 3].Value = "R(i)";
+                dataGridViewBHRbuffer[0, 4].Value = "#";
                 dataGridViewBHRbuffer[1, 1].Value = number;
                 dataGridViewBHRbuffer[1, 2].Value = number;
                 dataGridViewBHRbuffer[1, 3].Value = "0";
@@ -105,8 +112,8 @@ namespace classification_lab1
 
         private void numericUpDownMetrik_ValueChanged(object sender, EventArgs e)
         {
-            int number = Convert.ToInt32(numericUpDownNumber.Value);
-            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
+            number = Convert.ToInt32(numericUpDownNumber.Value);
+            metrik = Convert.ToInt32(numericUpDownMetrik.Value) - 1;
 
             DataTable dt = new DataTable();
 
@@ -226,6 +233,8 @@ namespace classification_lab1
                 dataGridViewBHRbuffer[i + 2, 1].Value = bufferB.ElementAt(bufferB.Count - i - 1);
                 dataGridViewBHRbuffer[i + 2, 2].Value = bufferH.ElementAt(bufferB.Count - i - 1);
                 dataGridViewBHRbuffer[i + 2, 3].Value = bufferR.ElementAt(bufferB.Count - i - 1);
+                if (classDataset != null)
+                    dataGridViewBHRbuffer[i + 2, 4].Value = classDataset[bufferH.ElementAt(bufferB.Count - i - 1) - 1];
             }
         }
 
@@ -372,21 +381,20 @@ namespace classification_lab1
 
         private void btnLoadDataset_Click(object sender, EventArgs e)
         {
-            var data = File.ReadAllLines("nba_pos.csv");
+            var data = File.ReadAllLines("iris.csv");
 
             numericUpDownNumber.Value = data.Length;
             numericUpDownMetrik.Value = data[0].Split(',').Length;
 
-            int number = Convert.ToInt32(numericUpDownNumber.Value);
-            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
-
             testDataset = new double[number, metrik];
+            classDataset = new int[number];
 
             for (int i = 0; i < number; i++)
             {
                 for (int j = 0; j < metrik; j++)
                 {
-                    testDataset[i, j] = Convert.ToDouble(data[i].Split(',')[j]);
+                    testDataset[i, j] = Convert.ToDouble(data[i].Split(',')[j + 1]);
+                    classDataset[i] = Convert.ToInt32(data[i].Split(',')[0]);
                     dataGridViewMatrixDataset[j + 1, i + 1].Value = testDataset[i, j];
                 }
             }
@@ -394,9 +402,6 @@ namespace classification_lab1
 
         private void btnGetMatrixOfDistances_Click(object sender, EventArgs e)
         {
-            int number = Convert.ToInt32(numericUpDownNumber.Value);
-            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
-
             testMatrix = new double[number, number];
 
             for (int i = 0; i < number; i++)
@@ -425,19 +430,45 @@ namespace classification_lab1
         {
             double result = 0;
 
-            for (int i = 0; i < firstPoint.Length; i++)
+            switch (cbMetrik.SelectedIndex)
             {
-                result += Math.Pow(firstPoint[i] - lastPoint[i], 2);
+                case 0:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        result += Math.Pow(firstPoint[i] - lastPoint[i], 2);
+                    }
+                    return Math.Sqrt(result);
+                case 1:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        result += Math.Pow(firstPoint[i] - lastPoint[i], 2);
+                    }
+                    return result;
+                case 2:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        result += Math.Abs(firstPoint[i] - lastPoint[i]);
+                    }
+                    return result;
+                case 3:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        if (Math.Abs(firstPoint[i] - lastPoint[i]) > result)
+                            result = Math.Abs(firstPoint[i] - lastPoint[i]);
+                    }
+                    return result;
+                default:
+                    for (int i = 0; i < firstPoint.Length; i++)
+                    {
+                        result += Math.Pow(Math.Abs(firstPoint[i] - lastPoint[i]), Convert.ToInt32(tbValuep.Text));
+                    }
+                    return Math.Pow(result, 1.0 / Convert.ToInt32(tbValuer.Text));
             }
-            return 10 * Math.Sqrt(result);
         }
 
         private void btnNormalizationOfData_Click(object sender, EventArgs e)
         {
             List<double[]> minmaxvalues = new List<double[]>();
-
-            int number = Convert.ToInt32(numericUpDownNumber.Value);
-            int metrik = Convert.ToInt32(numericUpDownMetrik.Value);
 
             // find min and max values
             for (int j = 0; j < metrik; j++)
@@ -465,6 +496,11 @@ namespace classification_lab1
                     dataGridViewMatrixDataset[j + 1, i + 1].Value = testDataset[i, j];
                 }
             }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            numericUpDownNumber.Value = numericUpDownMetrik.Value = 2;
         }
     }
 }

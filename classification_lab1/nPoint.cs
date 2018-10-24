@@ -41,7 +41,7 @@ namespace classification_lab1
 
         public void Assign(nPoint obj)
         {
-            for(int i = 0; i < Metrik.Length; i++)
+            for (int i = 0; i < Metrik.Length; i++)
             {
                 this.Metrik[i] = obj.Metrik[i];
             }
